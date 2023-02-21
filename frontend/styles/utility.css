@@ -1,0 +1,148 @@
+/*!====================  FONTS ====================*/
+@font-face {
+    font-family: cascadia_code;
+    src: url(../resources/font/Cascadia.ttf);
+}
+
+/*!==================== VARIABLES CSS ====================*/
+:root {
+    /* theme color */
+    --first-color: #000000;
+    --second-color: #333333;
+    --third-color: #5a5a5a;
+    --fourth-color: #757575;
+    /* text color */
+    --text: #8892b0;
+    --text-light: #a8b2d1;
+    --text-lighter: #ccd6f6;
+
+    /* hover */
+    --text-alt: #e4e9f8;
+
+    /*========== Font and typography ==========*/
+    --body-font: 'cascadia_code', sans-serif;
+    ;
+
+    /* 1.5rem = 24px, 1.25rem = 20px, 1.125rem = 18px, 0.75rem = 12px ... */
+    --large-font: 1.5rem;
+    --medium-font: 1.25rem;
+    --small-font: 1.125rem;
+    --smaller-font: 0.75rem;
+
+    /*========== Margenes Bottom ==========*/
+    /* .25rem = 4px, .5rem = 8px, .75rem = 12px ... */
+    --mb-0-25: .25rem;
+    --mb-0-5: .5rem;
+    --mb-0-75: .75rem;
+    --mb-1: 1rem;
+    --mb-1-5: 1.5rem;
+    --mb-2: 2rem;
+    --mb-2-5: 2.5rem;
+    --mb-3: 3rem;
+}
+
+/* Font size for large devices */
+@media screen and (min-width: 1024px) {
+    :root {
+        --big-font-size: 3rem;
+        --h1-font-size: 2.25rem;
+        --h2-font-size: 1.5rem;
+        --h3-font-size: 1.25rem;
+        --normal-font-size: 1rem;
+        --small-font-size: .875rem;
+        --smaller-font-size: .813rem;
+    }
+}
+
+
+/*!==================== BASE ====================*/
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--body-font);
+    /* background-color: var(--body-color); */
+    /* color: var(--text-color); */
+}
+
+h1, h2, h3, h4 {
+    font-weight: var(--font-semi-bold);
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    transition: ease-in-out 0.25s;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/*!==================== REUSABLE CSS CLASSES ====================*/
+/* .section {
+    padding: 2rem 0 4rem;
+}
+
+.section_title {
+    font-size: var(--small-font);
+    font-weight: 500;
+    color: var(--first-color);
+    display: flex;
+    align-items: center;
+    margin: 10px 0 40px;
+}
+
+.section_title>span {
+    font-size: var(--large-font);
+    color: var(--text-lighter);
+    margin-left: 10px;
+    font-weight: 700;
+}
+
+.section_title::after {
+    content: "";
+    flex-grow: 1;
+    height: 0.1px;
+    margin-left: 30px;
+    background-color: var(--text);
+}
+
+.section__subtitle {
+    display: block;
+    font-size: var(--small-font-size);
+    margin-bottom: var(--mb-3);
+}
+
+.section__title,
+.section__subtitle {
+    text-align: center;
+} */
+
+/*!==================== LAYOUT ====================*/
+
+/*!==================== MEDIA QUERY ====================*/
+
+/* For small devices */
+@media screen and (max-width: 568px) {}
+
+@media screen and (max-width: 350px) {}
+
+/* For medium devices */
+@media screen and (min-width: 568px) {}
+
+@media screen and (max-width: 767px) {}
+
+@media screen and (min-width: 768px) {}
+
+/* For large devices */
+@media screen and (min-width: 1024px) {}
