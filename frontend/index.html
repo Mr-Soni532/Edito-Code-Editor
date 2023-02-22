@@ -1,12 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/index.css">
     <title>Edito - Online Text Editor</title>
 </head>
+
 <body>
-    <h1>Edito - Online Text Editor</h1>
+    <div class="join-container">
+        <header class="join-header">
+            <img src="./images/Orange Minimalist Initial Letter E Logo (1).png" alt="">
+        </header>
+        <main class="join-main">
+            <form action="./editor.html">
+                <div class="info">
+                    <p>Paste invitation Edito ID</p>
+                </div>
+                <div class="form-control">
+                    <!-- <label for="room">USERNAME</label> -->
+                    <input type="text" name="username" id="username" placeholder="Username" required />
+                </div>
+                <div class="form-control">
+                    <!-- <label for="username">EDITIO ID</label> -->
+                    <input type="text" name="editioID" id="editioID" placeholder="Edito ID" required />
+                </div>
+                <button type="submit" class="btn">Join Room</button>
+                <div class="info">
+                    <p>If you don't have an invite then create</p>
+                    <a onclick="createNewID" href="" class="newID">new editio</a>
+                </div>
+            </form>
+        </main>
+    </div>
 </body>
+
 </html>
