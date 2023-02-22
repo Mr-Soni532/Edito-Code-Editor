@@ -19,6 +19,9 @@
 ::-webkit-scrollbar {
   width: 0px;
 }
+body{
+  background: var(--dark-color-c);
+}
 
 nav {
   width: 100%;
