@@ -78,10 +78,10 @@ h1, h2, h3, h4 {
     padding: 0;
 }
 
-a {
+/* a {
     text-decoration: none;
     transition: ease-in-out 0.25s;
-}
+} */
 
 img {
     max-width: 100%;
