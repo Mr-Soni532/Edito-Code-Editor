@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="./codemirror/lib/codemirror.css">
 
     <!-- for mode ===== here is for javascript only -->
+    <script src="./codemirror/mode/xml/xml.js"></script>
+    <script src="./codemirror/mode/css/css.js"></script>
     <script src="./codemirror/mode/javascript/javascript.js"></script>
 
     <!-- codemirror theme -->
@@ -23,6 +25,11 @@
     <!-- some addons -->
     <script src="./codemirror/addon/edit/closetag.js"></script>
     <script src="./codemirror/addon/edit/closebrackets.js"></script>
+    <script src="./codemirror/addon/scroll/simplescrollbars.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.0.0/split.min.js"
+        integrity="sha512-tTsZnBXEzNdEaqUO9Ok8fUofS73xieiBa54pD/sxOSvayIgItM9MmEM0CnUjA13LDnJT22sfwmjf20+Bo2174g=="
+        crossorigin="anonymous"></script>
     <title>Edito - Online Text Editor</title>
 </head>
 
@@ -118,8 +125,13 @@
         </ul>
     </div>
     <section class="home-section">
-        <div class="text">
-            <textarea id="realtimeEditor"></textarea>
+        <div class="text split">
+            <textarea id="htmlCode" placeholder="Type HTML code here" onkeyup="update()"></textarea>
+            <textarea id="cssCode" placeholder="Type CSS code here" onkeyup="update()"></textarea>
+            <textarea id="javascriptCode" placeholder="Type JavaScript code here" onkeyup="update()"></textarea>
+        </div>
+        <div class="iframe-container split">
+            <iframe id="viewer"></iframe>
         </div>
     </section>
 </body>
@@ -128,6 +140,8 @@
 
 
 <script>
+
+
     let sidebar = document.querySelector(".sidebar");
     let closeBtn = document.querySelector("#btn");
     let searchBtn = document.querySelector(".bx-search");
@@ -153,13 +167,59 @@
 
 
 
+
     // CodeMirror Code ==========>>>>>>>>>>>>>>>>
-    var editor = CodeMirror.fromTextArea(document.getElementById('realtimeEditor'), {
-        mode: 'javascript',
-        theme: 'ayu-dark',
+    var editorHTML = CodeMirror.fromTextArea(document.getElementById('htmlCode'), {
+        mode: 'xml',
         lineNumbers: true,
         autoCloseTags: true,
-        autoCloseBrackets: true
+        autoCloseBrackets: true,
+        lineWrapping: true,
+        scrollbarStyle: 'native',
     })
-    editor.setSize("1430", "900");
+    // // editor.setSize("200", "150");
+
+    var editorCSS = CodeMirror.fromTextArea(document.getElementById('cssCode'), {
+        mode: 'css',
+        theme: "ayu-dark",
+        lineNumbers: true,
+        autoCloseTags: true,
+        autoCloseBrackets: true,
+        lineWrapping: true,
+        scrollbarStyle: 'native',
+    })
+
+    var editorJS = CodeMirror.fromTextArea(document.getElementById('javascriptCode'), {
+        mode: 'javascript',
+        theme: "ayu-dark",
+        lineNumbers: true,
+        autoCloseTags: true,
+        autoCloseBrackets: true,
+        lineWrapping: true,
+        scrollbarStyle: 'native',
+    })
+
+
+
+
+
+    function update() {
+
+        let htmlCode = document.getElementById("htmlCode").value;
+        let cssCode = document.getElementById("cssCode").value;
+        let javascriptCode = document.getElementById("javascriptCode").value;
+
+        let text = htmlCode + "<style>" + cssCode + "</style>" + "<scri" + "pt>" + javascriptCode + "</scri" + "pt>";
+
+        let iframe = document.getElementById('viewer').contentWindow.document;
+        iframe.open();
+        iframe.write(text);
+        iframe.close();
+
+        console.log(editorHTML.value)
+
+
+    }
+
+    Split([".text", ".iframe-container"]);
 </script>
