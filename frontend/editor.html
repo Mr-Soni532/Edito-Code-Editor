@@ -31,6 +31,8 @@
         integrity="sha512-tTsZnBXEzNdEaqUO9Ok8fUofS73xieiBa54pD/sxOSvayIgItM9MmEM0CnUjA13LDnJT22sfwmjf20+Bo2174g=="
         crossorigin="anonymous"></script>
     <title>Edito - Online Text Editor</title>
+    <link rel="stylesheet" href="./styles/main_section.css">
+
 </head>
 
 <body>
@@ -124,7 +126,7 @@
             </li>
         </ul>
     </div>
-    <section class="home-section">
+    <!-- <section class="home-section">
         <div class="text split">
             <textarea id="htmlCode" placeholder="Type HTML code here" onkeyup="update()"></textarea>
             <textarea id="cssCode" placeholder="Type CSS code here" onkeyup="update()"></textarea>
@@ -132,6 +134,28 @@
         </div>
         <div class="iframe-container split">
             <iframe id="viewer"></iframe>
+        </div>
+    </section> -->
+
+    <section class="main_section" id="main_section">
+        <div class="resizable-x">
+            <div class="resizable-y" style="flex: 50%;">
+                <div class="html_editor" style="flex: 33.33%;">
+                    <textarea id="htmlCode" placeholder="Type HTML code here" onkeyup="update()"></textarea>
+                </div>
+                <div class="resizer-y"></div>
+                <div class="css_editor" style="flex: 33.33%;">
+                    <textarea id="cssCode" placeholder="Type CSS code here" onkeyup="update()"></textarea>
+                </div>
+                <div class="resizer-y"></div>
+                <div class="js_editor" style="flex: 33.33%;">
+                    <textarea id="javascriptCode" placeholder="Type JavaScript code here" onkeyup="update()"></textarea>
+                </div>
+            </div>
+            <div class="resizer-x"></div>
+            <div class="output_iframe_section" style="flex: 50%;">
+                <iframe id="viewer"></iframe>
+            </div>
         </div>
     </section>
 </body>
@@ -168,36 +192,36 @@
 
 
 
-    // CodeMirror Code ==========>>>>>>>>>>>>>>>>
-    var editorHTML = CodeMirror.fromTextArea(document.getElementById('htmlCode'), {
-        mode: 'xml',
-        lineNumbers: true,
-        autoCloseTags: true,
-        autoCloseBrackets: true,
-        lineWrapping: true,
-        scrollbarStyle: 'native',
-    })
-    // // editor.setSize("200", "150");
+    // // CodeMirror Code ==========>>>>>>>>>>>>>>>>
+    // var editorHTML = CodeMirror.fromTextArea(document.getElementById('htmlCode'), {
+    //     mode: 'xml',
+    //     lineNumbers: true,
+    //     autoCloseTags: true,
+    //     autoCloseBrackets: true,
+    //     lineWrapping: true,
+    //     scrollbarStyle: 'native',
+    // })
+    // // // editor.setSize("200", "150");
 
-    var editorCSS = CodeMirror.fromTextArea(document.getElementById('cssCode'), {
-        mode: 'css',
-        theme: "ayu-dark",
-        lineNumbers: true,
-        autoCloseTags: true,
-        autoCloseBrackets: true,
-        lineWrapping: true,
-        scrollbarStyle: 'native',
-    })
+    // var editorCSS = CodeMirror.fromTextArea(document.getElementById('cssCode'), {
+    //     mode: 'css',
+    //     theme: "ayu-dark",
+    //     lineNumbers: true,
+    //     autoCloseTags: true,
+    //     autoCloseBrackets: true,
+    //     lineWrapping: true,
+    //     scrollbarStyle: 'native',
+    // })
 
-    var editorJS = CodeMirror.fromTextArea(document.getElementById('javascriptCode'), {
-        mode: 'javascript',
-        theme: "ayu-dark",
-        lineNumbers: true,
-        autoCloseTags: true,
-        autoCloseBrackets: true,
-        lineWrapping: true,
-        scrollbarStyle: 'native',
-    })
+    // var editorJS = CodeMirror.fromTextArea(document.getElementById('javascriptCode'), {
+    //     mode: 'javascript',
+    //     theme: "ayu-dark",
+    //     lineNumbers: true,
+    //     autoCloseTags: true,
+    //     autoCloseBrackets: true,
+    //     lineWrapping: true,
+    //     scrollbarStyle: 'native',
+    // })
 
 
 
@@ -216,7 +240,7 @@
         iframe.write(text);
         iframe.close();
 
-        console.log(editorHTML.value)
+        // console.log(editorHTML.value)
 
 
     }
