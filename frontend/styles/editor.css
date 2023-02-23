@@ -16,9 +16,9 @@
   font-family: 'Poppins', sans-serif;
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 0px;
-}
+} */
 body{
   background: var(--dark-color-c);
 }
@@ -351,15 +351,10 @@ nav {
   color: #252526;
   font-size: 25px;
   font-weight: 500;
-  margin: 18px;
-  padding: 40px 0;
+  /* margin: 0 ; */
+  padding: 50px 0;
 }
 
-textarea {
-  background: transparent;
-  color: var(--light-color-a);
-  font-size: 30px;
-}
 
 @media (max-width: 420px) {
   .sidebar li .tooltip {

@@ -6,8 +6,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./styles/editor.css">
+    <!-- External icon links -->
     <script src="https://kit.fontawesome.com/f584623432.js" crossorigin="anonymous"></script>
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- codemirror liberies css & script -->
+    <script src="./codemirror/lib/codemirror.js"></script>
+    <link rel="stylesheet" href="./codemirror/lib/codemirror.css">
+
+    <!-- for mode ===== here is for javascript only -->
+    <script src="./codemirror/mode/javascript/javascript.js"></script>
+
+    <!-- codemirror theme -->
+    <link rel="stylesheet" href="./codemirror/theme/ayu-dark.css">
+
+    <!-- some addons -->
+    <script src="./codemirror/addon/edit/closetag.js"></script>
+    <script src="./codemirror/addon/edit/closebrackets.js"></script>
     <title>Edito - Online Text Editor</title>
 </head>
 
@@ -135,4 +150,16 @@
             closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");//replacing the iocns class
         }
     }
+
+
+
+    // CodeMirror Code ==========>>>>>>>>>>>>>>>>
+    var editor = CodeMirror.fromTextArea(document.getElementById('realtimeEditor'), {
+        mode: 'javascript',
+        theme: 'ayu-dark',
+        lineNumbers: true,
+        autoCloseTags: true,
+        autoCloseBrackets: true
+    })
+    editor.setSize("1430", "900");
 </script>
