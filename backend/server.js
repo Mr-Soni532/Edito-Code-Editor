@@ -31,3 +31,35 @@ let state = {
   active: 0,
   mode: "htmlmixed",
 };
+
+io.on("connection", (socket) => {
+  console.log(`client is connected ${socket.id}`);
+  io.emit("broadcast", state);
+
+  socket.on("emit", (arg) => {
+    state = arg;
+    socket.broadcast.emit("broadcast", state);
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`client is disconnected ${socket.id}`);
+  });
+});
+
+// SPA
+app.use(
+  "/public",
+  express.static(
+    path.join(__dirname, "collaborative-code-editor-client", "public")
+  )
+);
+
+app.get("*", (_req, res) => {
+  res.sendFile(
+    path.resolve(__dirname, "collaborative-code-editor-client", "index.html")
+  );
+});
+
+server.listen(port, () => {
+  console.log(`Server is listening on port: http://localhost:${port}`);
+});
