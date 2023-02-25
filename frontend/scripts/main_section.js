@@ -99,21 +99,31 @@
             const deltaY_1 = clientY_1 - (resizer1._clientY || clientY_1);
             resizer1._clientY = clientY_1;
             // ------------------------------------------------
+            let mainHeight = document.getElementById('main_section').clientHeight;
+            // let moveheight = ((resizer1._clientY-60) / (mainHeight-60)) * 100
+            let moveheight = ((resizer1._clientY-60) / (mainHeight-60))
+            // ------------------------------------------------
             const prevElement_1 = resizer1.previousElementSibling;
             const nextElement_1 = resizer1.nextElementSibling;
-            let prevHeight_1 = (resizer1._clientY / screen.height) * 100
-            prevHeight_1 = prevHeight_1
+            // let prevHeight = (prevElement_1.clientHeight/(mainHeight-60))*100
+            // let nextHeight = (nextElement_1.clientHeight/(mainHeight-60))*100
+            let prevHeight = prevElement_1.clientHeight
+            let nextHeight = nextElement_1.clientHeight
+            console.log(prevHeight, nextHeight , moveheight)
             // UP
             if (deltaY_1 < 0) {
-                let diffHeight = (33.33 - prevHeight_1)
-                prevElement_1.style.height = prevHeight_1 + '%';
-                nextElement_1.style.height = (33.33 + diffHeight) + '%'
+                // console.log(prevHeight)
+                // let diffHeight = Math.abs(nextHeight-prevHeight)
+                // console.log( nextHeight,prevHeight,diffHeight)
+                // prevElement_1.style.height = moveheight + '%';
+                // nextElement_1.style.height = (nextHeight ) + '%'
             }
             // DOWN
             if (deltaY_1 > 0) {
-                let diffHeight = (prevHeight_1-33.33)
-                prevElement_1.style.height = prevHeight_1 + '%';
-                nextElement_1.style.height = (33.33 - diffHeight) + '%'
+                // console.log('next', nextHeight)
+                // let diffHeight = (moveheight-33.33)
+                // prevElement_1.style.height = moveheight + '%';
+                // nextElement_1.style.height = (33.33 - diffHeight) + '%'
             }
 
         }
@@ -138,22 +148,20 @@
             const nextElement_2 = resizer2.nextElementSibling;
 
             //=========== Move Percentage
-            let prevHeight_2 = ((resizer2._clientY-60) / (main_section.clientHeight-60)) * 100
-    
-            console.log(prevHeight_2)
-            // // UP
+            let moveHeight = ((resizer2._clientY-60) / (main_section.clientHeight-60)) * 100
+            
+            // console.log(moveHeight)
+            let prevHeight = +prevElement_2.style.height.slice(0,-1)
+            // UP
             if (deltaY_2 < 0) {
-                let nextHeight = +nextElement_2.style.height.slice(0,-1);
-                let diffHeight = (66.66 - prevHeight_2)
-                // console.log(nextHeight-diffHeight)
-                // prevElement_2.style.height = (nextHeight-diffHeight) + '%';
-                // nextElement_2.style.height = (100-prevHeight_2) + '%'
+                // console.log(prevHeight)
+                // prevElement_2.style.height = (moveHeight-33.33) + '%';
+                // nextElement_2.style.height = (100-moveHeight) + '%'
             }
             // DOWN
             if (deltaY_2 > 0) {
-                // let prev_height = +prevElement_2.style.height.slice(0,-1);
-                // let nextHeight = +nextElement_2.style.height.slice(0,-1);
-               
+                // prevElement_2.style.height = (prevHeight_2-33.33) + '%';
+                // nextElement_2.style.height = (100-prevHeight_2) + '%'
             }
 
         }

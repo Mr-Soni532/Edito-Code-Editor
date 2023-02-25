@@ -1,4 +1,5 @@
 
+
 // const express =  require("express");
 // const http = require("http");
 // const socketIo = require("socket.io");
@@ -20,6 +21,36 @@
 //         }
 //     );
 // }
+=======
+// const express=require('express');
+// const socketio=require('socket.io');
+// const http=require('http');
+// require('dotenv').config();
+// const app=express();
+// // We can add routes here
+
+const express =  require("express");
+const http = require("http");
+const socketIo = require("socket.io");
+require("dotenv").config();
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
+app.get("/", (req, res)=>{
+    res.send("Home");
+})
+const user_socket_map = {};
+function getAllConnectedClients(room_id) {
+    return Array.from(io.sockets.adapter.rooms.get(room_id) || []).map(
+        (socket_id) => {
+            return {
+                socket_id,
+                username: user_socket_map[socket_id],
+            };
+        }
+    );
+}
+
 
 // io.on('connection', (socket) => {
 //     console.log('socket connected', socket.id);
@@ -80,3 +111,6 @@
 //     console.log(`Running at Port:${process.env.port}`);
 
 // })
+
+// })
+
