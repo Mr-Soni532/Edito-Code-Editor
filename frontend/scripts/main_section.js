@@ -100,26 +100,29 @@
             resizer1._clientY = clientY_1;
             // ------------------------------------------------
             let mainHeight = document.getElementById('main_section').clientHeight;
-            // let moveheight = ((resizer1._clientY-60) / (mainHeight-60)) * 100
-            let moveheight = ((resizer1._clientY-60) / (mainHeight-60))
+            let moveheight = ((resizer1._clientY-60) / (mainHeight)) * 100
+            // let moveheight = ((resizer1._clientY-60) / (mainHeight-60))
             // ------------------------------------------------
             const prevElement_1 = resizer1.previousElementSibling;
             const nextElement_1 = resizer1.nextElementSibling;
-            // let prevHeight = (prevElement_1.clientHeight/(mainHeight-60))*100
-            // let nextHeight = (nextElement_1.clientHeight/(mainHeight-60))*100
-            let prevHeight = prevElement_1.clientHeight
-            let nextHeight = nextElement_1.clientHeight
-            console.log(prevHeight, nextHeight , moveheight)
+            let prevHeight = (prevElement_1.clientHeight/(mainHeight))*100
+            let nextHeight = (nextElement_1.clientHeight/(mainHeight))*100
+            // let prevHeight = prevElement_1.clientHeight
+            // let nextHeight = nextElement_1.clientHeight
+            // console.log(prevHeight, nextHeight , moveheight)
             // UP
             if (deltaY_1 < 0) {
-                // console.log(prevHeight)
+                console.log('move',moveheight)
+                console.log('up', prevHeight, 'down', nextHeight )
                 // let diffHeight = Math.abs(nextHeight-prevHeight)
                 // console.log( nextHeight,prevHeight,diffHeight)
-                // prevElement_1.style.height = moveheight + '%';
+                // prevElement_1.style.height = prevHeight + '%';
                 // nextElement_1.style.height = (nextHeight ) + '%'
             }
             // DOWN
             if (deltaY_1 > 0) {
+                console.log('move',moveheight)
+                console.log('up', prevHeight, 'down', nextHeight )
                 // console.log('next', nextHeight)
                 // let diffHeight = (moveheight-33.33)
                 // prevElement_1.style.height = moveheight + '%';

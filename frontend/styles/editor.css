@@ -28,10 +28,13 @@ nav {
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 8px 20px;
-  background: var(--dark-color-a);
+  background: #000000;
   z-index: 1000;
   height: 60px;
+  border-bottom: 0.3px solid white;
+  color: #dbdbdb;
 }
 
 #logo img {
@@ -53,7 +56,70 @@ nav {
   color: var(--light-color-a);
   cursor: pointer;
 }
+  /* ========\ view dropdown /========== */
+  .dropbtn {
+    background: transparent;
+    color: white;
+    padding: 2px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight:400;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #dfdfdf;
 
+}
+.dropbtn>span{
+  margin-left: 5px;
+  margin-top: 4px;
+}
+
+.dropdown {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    /* padding: 1px 25px; */
+}
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0%;
+    background: #000000;
+    color: #dbdbdb;
+    min-width: 160px;
+    border-radius: 4px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    color: #dbdbdb;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+  background: #f1f1f1;
+  color: #000000;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
+  /* ========\ Search Bar /========== */
+.nav_search-bar{
+  display: flex;
+}
 #searchBar {
   width: 400px;
   height: 28px;
@@ -417,7 +483,9 @@ nav {
 }
 
 /*! ==================| Main Section |=================== */
-
+.layout_2{
+  /* display: none; */
+}
 
 
 
