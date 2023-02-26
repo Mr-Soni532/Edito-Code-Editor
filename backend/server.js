@@ -2,10 +2,13 @@
 const express =  require("express");
 const http = require("http");
 const socketIo = require("socket.io");
+const { v4: uuidv4 } = require('uuid');
+var cors = require('cors')
 require("dotenv").config();
 
 //Creating Server
 const app = express();
+app.use(cors());
 const server = http.createServer(app);
 const io = socketIo(server);
 
@@ -77,6 +80,12 @@ io.on('connection', (socket) => {
         socket.leave();
     });
 });
+
+app.get("/getNewID",(req,res)=>{
+    // res.cookie('editoID', `${uuidv4()}`).send('cookie set');
+    let id=uuidv4();
+    res.send({id});
+})
 
 server.listen(process.env.port, ()=>{
     console.log(`Serving at http://localhost:${process.env.port}`);
