@@ -26,6 +26,12 @@
     <script src="./codemirror/addon/edit/closetag.js"></script>
     <script src="./codemirror/addon/edit/closebrackets.js"></script>
     <script src="./codemirror/addon/scroll/simplescrollbars.js"></script>
+    <script src="./codemirror/addon/hint/show-hint.js"></script>
+    <script src="./codemirror/addon/hint/show-hint.js"></script>
+    <script src="./codemirror/addon/hint/css-hint.js"></script>
+    <script src="./codemirror/addon/hint/html-hint.js"></script>
+    <script src="./codemirror/addon/hint/javascript-hint.js"></script>
+    <link rel="stylesheet" href="./codemirror/addon/hint/show-hint.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.0.0/split.min.js"
         integrity="sha512-tTsZnBXEzNdEaqUO9Ok8fUofS73xieiBa54pD/sxOSvayIgItM9MmEM0CnUjA13LDnJT22sfwmjf20+Bo2174g=="
@@ -276,6 +282,7 @@
         lineWrapping: true,
         scrollbarStyle: 'native',
         undoDepth: 100,
+        extraKeys: { "Ctrl-Space": "autocomplete" }
     })
 
 
@@ -288,6 +295,7 @@
         lineWrapping: true,
         scrollbarStyle: 'native',
         undoDepth: 100,
+        extraKeys: { "Ctrl-Space": "autocomplete" }
     })
 
     var editorJS = CodeMirror.fromTextArea(document.getElementById('javascriptCode'), {
@@ -299,6 +307,7 @@
         lineWrapping: true,
         scrollbarStyle: 'native',
         undoDepth: 100,
+        extraKeys: { "Ctrl-Space": "autocomplete" }
     })
 
 

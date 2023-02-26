@@ -12,7 +12,7 @@
 <body>
     <div class="join-container">
         <header class="join-header">
-            <img src="./images/Orange Minimalist Initial Letter E Logo (1).png" alt="">
+            <img src="./resources/images/main.png.png" alt="">
         </header>
         <main class="join-main">
             <form action="./editor.html">
@@ -25,12 +25,12 @@
                 </div>
                 <div class="form-control">
                     <!-- <label for="username">EDITIO ID</label> -->
-                    <input type="text" name="editioID" id="editioID" placeholder="Edito ID" required />
+                    <input type="text" name="editoID" id="editoID" placeholder="Edito ID" required />
                 </div>
                 <button type="submit" class="btn">Join Room</button>
                 <div class="info">
                     <p>If you don't have an invite then create</p>
-                    <a onclick="createNewID" href="" class="newID">new editio</a>
+                    <a id="createNewID" href="" class="newID">new edito</a>
                 </div>
             </form>
         </main>
@@ -38,3 +38,16 @@
 </body>
 
 </html>
+
+<script>
+    let newID = document.getElementById("createNewID").addEventListener("click",fun);
+
+
+    async function fun(e){
+        e.preventDefault();
+        let res = await fetch("http://localhost:3000/getNewID");
+        let data = await res.json();
+        // console.log(id)
+        document.getElementById("editoID").value=data.id;
+    }
+</script>
