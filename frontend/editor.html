@@ -40,9 +40,9 @@
     <link rel="stylesheet" href="./styles/main_section.css">
 
     <!-- ----------Socket cdn------------ -->
-    <script src="https://cdn.socket.io/3.1.3/socket.io.min.js"
+    <!-- <script src="https://cdn.socket.io/3.1.3/socket.io.min.js"
         integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script> -->
     <!-- ========alert======== -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -50,7 +50,7 @@
 <body>
     <nav>
         <div id="nav_logo">
-            <i class='bx bxl-c-plus-plus icon' style="font-size: 30px; color: white;"></i>
+           <img src="./images/main.png.png" alt="" width="110">
         </div>
 
 
@@ -69,26 +69,22 @@
                 <a id="nav_layout-1">Layout 1</a>
                 <a id="nav_layout-2">Layout 2</a>
                 <a id="nav_layout-3">Layout 3</a>
-            </div>
-            <i class='bx bx-menu' id="btn" style="margin-top: 10px; font-size: 20px; margin-left: 120px;"></i>
-
+            </div>    
         </div>
+        <i class='bx bx-menu' id="btn" style="margin-top: 10px; font-size: 20px; margin-left: 120px;"></i>
 
 
     </nav>
 
     <div class="sidebar">
         <div class="logo-details">
-            <ul style="margin-top: 80px;">
+            <ul style="margin-top: 100px;width: 100%;">
                 <li>
                     <a href="#">
                         <i class='bx bx-home'></i>
                         <span class="links_name" id="currentRoom">Room ID</span>
                     </a>
                 </li>
-
-
-
                 <li>
                     <a href="#">
                         <i class='bx bx-user'></i>
@@ -98,9 +94,7 @@
             </ul>
         </div>
         <ul class="nav-list" id="appendItems">
-
-
-
+            <!-- code Injecting -->
         </ul>
     </div>
     <!-- <section class="home-section">
@@ -114,28 +108,28 @@
         </div>
     </section> -->
 
-    <!-- <section class="main_section" id="main_section">
-        <div class="resizable-x">
-            <div class="resizable-y" style="flex: 50%;">
-                <div class="html_editor" style="height: 33.33%;min-height: 50px;">
-                    <textarea id="htmlCode" placeholder="Type HTML code here" ></textarea>
-                </div>
-                <div class="resizer-y resizer-y-1"></div>
-                <div class="css_editor" style="height: 33.33%;min-height: 50px;">
-                    <textarea id="cssCode" placeholder="Type CSS code here" ></textarea>
-                </div>
-                <div class="resizer-y resizer-y-2"></div>
-                <div class="js_editor" style="height: 33.33%;min-height: 50px;">
-                    <textarea id="javascriptCode" placeholder="Type JavaScript code here" ></textarea>
-                </div>
-            </div>
-            <div class="resizer-x"></div>
+    <section class="main_section layout_1" id="main_section">
+        <div class="resizable-x" style="flex-direction: row-reverse;">
             <div class="output_iframe_section" style="flex: 50%;">
                 <iframe id="viewer"></iframe>
             </div>
+            <div class="resizer-x"></div>
+            <div class="resizable-y" style="flex: 50%;">
+                <div class="html_editor" style="height: 33.33%;min-height: 50px;">
+                    <div class="resizer-y html">HTML</div>
+                    <textarea id="htmlCode" placeholder="Type HTML code here"></textarea>
+                </div>
+                <div class="css_editor" style="height: 33.33%;min-height: 50px;">
+                    <div class="resizer-y resizer-y-1 css">CSS</div>
+                    <textarea id="cssCode" placeholder="Type CSS code here"></textarea>
+                </div>
+                <div class="js_editor" style="height: 33.33%;min-height: 50px;">
+                    <div class="resizer-y resizer-y-2 js">JS</div>
+                    <textarea id="javascriptCode" placeholder="Type JavaScript code here"></textarea>
+                </div>
+            </div>
         </div>
-    </section> -->
-
+    </section>
     <!-- <section class="main_section layout_2" id="main_section">
         <div class="resizable-x">
             <div class="output_iframe_section" style="flex: 50%;">
@@ -158,29 +152,7 @@
             </div>
         </div>
     </section> -->
-    <!-- <section class="main_section layout_2" id="main_section">
-        <div class="resizable-x">
-            <div class="output_iframe_section" style="flex: 50%;">
-                <iframe id="viewer"></iframe>
-            </div>
-            <div class="resizer-x"></div>
-            <div class="resizable-y" style="flex: 50%;">
-                <div class="html_editor" style="height: 33.33%;min-height: 50px;">
-                    <div class="resizer-y html">HTML</div>
-                    <textarea id="htmlCode" placeholder="Type HTML code here"></textarea>
-                </div>
-                <div class="css_editor" style="height: 33.33%;min-height: 50px;">
-                    <div class="resizer-y resizer-y-1 css">CSS</div>
-                    <textarea id="cssCode" placeholder="Type CSS code here"></textarea>
-                </div>
-                <div class="js_editor" style="height: 33.33%;min-height: 50px;">
-                    <div class="resizer-y resizer-y-2 js">JS</div>
-                    <textarea id="javascriptCode" placeholder="Type JavaScript code here"></textarea>
-                </div>
-            </div>
-        </div>
-    </section> -->
-    <section class="main_section layout_3" id="main_section">
+    <!-- <section class="main_section layout_3" id="main_section">
         <div class="resizable-y l-3">
             <div class="output_iframe_section l-3" style="flex: 50%;">
                 <iframe id="viewer"></iframe>
@@ -202,182 +174,17 @@
                     <span></span>
                 </div>
                 <div class="js_editor editor_l-3" style="height: 100%;min-height: 50px;width: 33.33%;">
-                    <div>
+                    <div style="width: 100%;">
                         <div class="resizer-x l-3 resizer-y_l-3_2 js">JS</div>
                         <textarea id="javascriptCode" placeholder="Type JavaScript code here"></textarea>
                     </div>
-                    <span></span>
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 </body>
-
 </html>
 
-
-<script>
-
-
-    let sidebar = document.querySelector(".sidebar");
-    let closeBtn = document.querySelector("#btn");
-
-    closeBtn.addEventListener("click", () => {
-        sidebar.classList.toggle("open");
-        menuBtnChange();//calling the function(optional)
-    });
-
-
-
-    // following are the code to change sidebar button(optional)
-    function menuBtnChange() {
-        if (sidebar.classList.contains("open")) {
-            closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");//replacing the iocns class
-        } else {
-            closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");//replacing the iocns class
-        }
-    }
-
-
-
-
-    // CodeMirror Code ==========>>>>>>>>>>>>>>>>
-    var editorHTML = CodeMirror.fromTextArea(document.getElementById('htmlCode'), {
-        mode: 'xml',
-        theme: "ayu-dark",
-        lineNumbers: true,
-        autoCloseTags: true,
-        autoCloseBrackets: true,
-        lineWrapping: true,
-        scrollbarStyle: 'native',
-        undoDepth: 100,
-        extraKeys: { "Ctrl-Space": "autocomplete" }
-    })
-
-
-    var editorCSS = CodeMirror.fromTextArea(document.getElementById('cssCode'), {
-        mode: 'css',
-        theme: "ayu-dark",
-        lineNumbers: true,
-        autoCloseTags: true,
-        autoCloseBrackets: true,
-        lineWrapping: true,
-        scrollbarStyle: 'native',
-        undoDepth: 100,
-        extraKeys: { "Ctrl-Space": "autocomplete" }
-    })
-
-    var editorJS = CodeMirror.fromTextArea(document.getElementById('javascriptCode'), {
-        mode: 'javascript',
-        theme: "ayu-dark",
-        lineNumbers: true,
-        autoCloseTags: true,
-        autoCloseBrackets: true,
-        lineWrapping: true,
-        scrollbarStyle: 'native',
-        undoDepth: 100,
-        extraKeys: { "Ctrl-Space": "autocomplete" }
-    })
-
-
-
-    let htmlEditor = "";
-    let cssEditor = "";
-    let jsEditor = "";
-
-    editorHTML.on("keyup", (editor) => {
-        htmlEditor = editor.doc.getValue();
-        codeEmithtml(htmlEditor);
-        update();
-    });
-    editorCSS.on("keyup", (editor) => {
-        cssEditor = editor.doc.getValue();
-        codeEmitcss(cssEditor);
-        update();
-    });
-    editorJS.on("keyup", (editor) => {
-        jsEditor = editor.doc.getValue();
-        codeEmitjs(jsEditor);
-        update();
-    });
-
-
-    function update() {
-        let text = htmlEditor + "<style>" + cssEditor + "</style>" + "<scri" + "pt>" + jsEditor + "</scri" + "pt>";
-        console.log(htmlEditor, cssEditor, jsEditor)
-        let iframe = document.getElementById('viewer').contentWindow.document;
-        iframe.open();
-        iframe.write(`${text}`);
-        iframe.close();
-        let srcDoc;
-
-
-        iframe.srcdoc = srcDoc;
-    }
-
-    //------------ Socket.io --------------
-    const urlParams = new URLSearchParams(window.location.search);
-
-    const username = urlParams.get("username");
-    const room_id = urlParams.get("editoID");
-    const socket = io("http://localhost:3000/", { transports: ["websocket"] });
-
-
-    document.getElementById("currentRoom").innerText = room_id;
-    document.getElementById("currentUser").innerText = username;
-
-    console.log(username, room_id);
-
-    socket.emit("join", { username, room_id });
-
-    function codeEmithtml(code) {
-        socket.emit("code_change_html", { room_id, code });
-    }
-    function codeEmitcss(code) {
-        socket.emit("code_change_css", { room_id, code });
-    }
-    function codeEmitjs(code) {
-        socket.emit("code_change_js", { room_id, code });
-    }
-
-    socket.on("code_change_html", ({ code }) => {
-        console.log("html" + code);
-        editorHTML.getDoc().setValue(code);
-        htmlEditor = code;
-        update();
-    });
-    socket.on("code_change_css", ({ code }) => {
-        console.log("css" + code);
-        editorCSS.getDoc().setValue(code);
-        cssEditor = code;
-        update();
-    });
-    socket.on("code_change_js", ({ code }) => {
-        console.log("js" + code);
-        editorJS.getDoc().setValue(code);
-        jsEditor = code;
-        update();
-    });
-
-    socket.on("join", ({ username, clients }) => {
-        console.log(username);
-        console.log(clients)
-        let doc = document.getElementById("appendItems");
-        clients.forEach((el) => {
-            const newClient = document.createElement("li");
-            newClient.innerHTML = `<a href="#">
-                        <i class='bx bx-user'></i>
-                        <span class="links_name">${el.username}</span>
-                    </a>`;
-            doc.append(newClient)
-        })
-        Swal.fire({
-            position: "top-end",
-            title: `${username} has joined`,
-            showConfirmButton: false,
-            timer: 3000,
-        });
-    });
-
-</script>
-<script src="./scripts/main_section.js"></script>
+<script src="./scripts/editor.js"></script>
+<script src="./scripts/layout.js"></script>
+<!-- <script src="./scripts/main_section.js"></script> -->
