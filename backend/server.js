@@ -46,7 +46,7 @@ io.on('connection', (socket) => {
         // joining room 
         socket.join(room_id);
         // getting all the clients for the room
-        // const clients = getAllConnectedClients(room_id);
+        const clients = getAllConnectedClients(room_id);
         // clients.forEach(({ socketId }) => {
         //     io.to(socketId).emit("join", {
         //         clients,
@@ -54,7 +54,7 @@ io.on('connection', (socket) => {
         //         socketId: socket.id,
         //     });
         // });
-        socket.broadcast.to(room_id).emit("join",{username});
+        socket.broadcast.to(room_id).emit("join",{username,clients});
     });
 
      // event for emitting the code_change 

@@ -151,7 +151,7 @@ nav {
 
 .sidebar {
   position: fixed;
-  left: 0;
+  right: 0;
   top: 40px;
   height: 100%;
   width: 78px;
