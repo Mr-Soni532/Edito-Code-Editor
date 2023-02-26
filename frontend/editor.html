@@ -1,48 +1,266 @@
-<!-- <!DOCTYPE html> -->
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edito - A collaborative coding platform</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <link rel="stylesheet" href="./public/css/line-awesome.min.css">
-    <link href="./public/css/styles.css" rel="stylesheet">
-    <link href="./public/css/codemirror-5.59.0/codemirror.css" rel="stylesheet" />
-    <link href="./public/css/codemirror-5.59.0/material-darker.css" rel="stylesheet">
-    <link href="./public/css/codemirror-5.59.0/dracula.css" rel="stylesheet">
-    <link href="./public/css/codemirror-5.59.0/material-palenight.css" rel="stylesheet">
-    <link href="./public/css/codemirror-5.59.0/material-ocean.css" rel="stylesheet">
+    <link rel="stylesheet" href="./styles/editor.css">
+    <!-- External icon links -->
+    <script src="https://kit.fontawesome.com/f584623432.js" crossorigin="anonymous"></script>
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- codemirror liberies css & script -->
+    <script src="./codemirror/lib/codemirror.js"></script>
+    <link rel="stylesheet" href="./codemirror/lib/codemirror.css">
+
+    <!-- for mode ===== here is for javascript only -->
+    <script src="./codemirror/mode/xml/xml.js"></script>
+    <script src="./codemirror/mode/css/css.js"></script>
+    <script src="./codemirror/mode/javascript/javascript.js"></script>
+
+    <!-- codemirror theme -->
+    <link rel="stylesheet" href="./codemirror/theme/ayu-dark.css">
+
+    <!-- some addons -->
+    <script src="./codemirror/addon/edit/closetag.js"></script>
+    <script src="./codemirror/addon/edit/closebrackets.js"></script>
+    <script src="./codemirror/addon/scroll/simplescrollbars.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.0.0/split.min.js"
+        integrity="sha512-tTsZnBXEzNdEaqUO9Ok8fUofS73xieiBa54pD/sxOSvayIgItM9MmEM0CnUjA13LDnJT22sfwmjf20+Bo2174g=="
+        crossorigin="anonymous"></script>
+    <title>Edito - Online Text Editor</title>
+    <link rel="stylesheet" href="./styles/main_section.css">
+
 </head>
 
 <body>
+    <nav>
+        <div id="logo">
+            <i class='bx bxl-c-plus-plus icon' style="font-size: 30px; color: white;"></i>
+        </div>
 
-    <div id="app"></div>
-    <script src="./public/js/codemirror-5.59.0/lib/codemirror.js"></script>
-    <script src="./public/js/codemirror-5.59.0/mode/javascript/javascript.js"></script>
-    <script src="./public/js/codemirror-5.59.0/mode/clike/clike.js"></script>
-    <script src="./public/js/codemirror-5.59.0/mode/python/python.js"></script>
-    <script src="./public/js/codemirror-5.59.0/mode/xml/xml.js"></script>
-    <script src="./public/js/codemirror-5.59.0/mode/php/php.js"></script>
-    <script src="./public/js/codemirror-5.59.0/mode/htmlmixed/htmlmixed.js"></script>
-    <script src="./public/js/codemirror-5.59.0/mode/markdown/markdown.js"></script>
-    <script src="./public/js/codemirror-5.59.0/mode/gfm/gfm.js"></script>
-    <script src="./public/js/codemirror-5.59.0/mode/sql/sql.js"></script>
-    <script src="./public/js/codemirror-5.59.0/mode/shell/shell.js"></script>
-    <script src="./public/js/codemirror-5.59.0/mode/jsx/jsx.js"></script>
-    <script src="./public/js/codemirror-5.59.0/addon/edit/closebrackets.js"></script>
-    <script src="./public/js/codemirror-5.59.0/addon/edit/closetag.js"></script>
+        <div id="list">
+            <ul>
+                <li>File</li>
+                <li>Edit</li>
+                <li>Selection</li>
+                <li>View</li>
+                <li>Go</li>
+                <li>Run</li>
+                <li>Terminal</li>
+                <li>Help</li>
+            </ul>
+        </div>
 
-    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"
-        integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
-        crossorigin="anonymous"></script>
+        <div id="controller">
+            <i class="fa-solid fa-arrow-left"></i>
+            <i class="fa-solid fa-arrow-right" style="color: rgb(110, 110, 110);"></i>
+        </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+        <div id="searchBar">
+            <i class="fa-solid fa-magnifying-glass"></i>Folder Name
+        </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-        crossorigin="anonymous"></script>
+    </nav>
+
+    <div class="sidebar">
+        <div class="logo-details">
+            <!-- <i class='bx bxl-c-plus-plus icon'></i> -->
+            <div class="logo_name">Edito</div>
+            <i class='bx bx-menu' id="btn"></i>
+        </div>
+        <ul class="nav-list">
+
+            <li>
+                <i class='bx bx-search'></i>
+                <input type="text" placeholder="Search...">
+                <span class="tooltip">Search</span>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bx-folder'></i>
+                    <span class="links_name">Explorer</span>
+                </a>
+                <span class="tooltip">Explorer</span>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="links_name">Extensions</span>
+                </a>
+                <span class="tooltip">Extensions</span>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bx-user'></i>
+                    <span class="links_name">User</span>
+                </a>
+                <span class="tooltip">User</span>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bx-chat'></i>
+                    <span class="links_name">Messages</span>
+                </a>
+                <span class="tooltip">Messages</span>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class='bx bx-cog'></i>
+                    <span class="links_name">Setting</span>
+                </a>
+                <span class="tooltip">Setting</span>
+            </li>
+            <li class="profile">
+                <div class="profile-details">
+                    <!-- <img src="profile.jpg" alt="profileImg"> -->
+                    <div class="name_job">
+                        <div class="name">User Name</div>
+                        <div class="job">Web designer</div>
+                    </div>
+                </div>
+                <i class='bx bx-log-out' id="log_out"></i>
+            </li>
+        </ul>
+    </div>
+    <!-- <section class="home-section">
+        <div class="text split">
+            <textarea id="htmlCode" placeholder="Type HTML code here" onkeyup="update()"></textarea>
+            <textarea id="cssCode" placeholder="Type CSS code here" onkeyup="update()"></textarea>
+            <textarea id="javascriptCode" placeholder="Type JavaScript code here" onkeyup="update()"></textarea>
+        </div>
+        <div class="iframe-container split">
+            <iframe id="viewer"></iframe>
+        </div>
+    </section> -->
+
+    <section class="main_section" id="main_section">
+        <div class="resizable-x">
+            <div class="resizable-y" style="flex: 50%;">
+                <div class="html_editor" style="height: 33.33%;min-height: 50px;">
+                    <textarea id="htmlCode" placeholder="Type HTML code here" ></textarea>
+                </div>
+                <div class="resizer-y resizer-y-1"></div>
+                <div class="css_editor" style="height: 33.33%;min-height: 50px;">
+                    <textarea id="cssCode" placeholder="Type CSS code here" ></textarea>
+                </div>
+                <div class="resizer-y resizer-y-2"></div>
+                <div class="js_editor" style="height: 33.33%;min-height: 50px;">
+                    <textarea id="javascriptCode" placeholder="Type JavaScript code here" ></textarea>
+                </div>
+            </div>
+            <div class="resizer-x"></div>
+            <div class="output_iframe_section" style="flex: 50%;">
+                <iframe id="viewer"></iframe>
+            </div>
+        </div>
+    </section>
 </body>
 
 </html>
+
+
+<script>
+
+
+    let sidebar = document.querySelector(".sidebar");
+    let closeBtn = document.querySelector("#btn");
+    let searchBtn = document.querySelector(".bx-search");
+
+    closeBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+        menuBtnChange();//calling the function(optional)
+    });
+
+    searchBtn.addEventListener("click", () => { // Sidebar open when you click on the search iocn
+        sidebar.classList.toggle("open");
+        menuBtnChange(); //calling the function(optional)
+    });
+
+    // following are the code to change sidebar button(optional)
+    function menuBtnChange() {
+        if (sidebar.classList.contains("open")) {
+            closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");//replacing the iocns class
+        } else {
+            closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");//replacing the iocns class
+        }
+    }
+
+
+
+
+    // CodeMirror Code ==========>>>>>>>>>>>>>>>>
+    var editorHTML = CodeMirror.fromTextArea(document.getElementById('htmlCode'), {
+        mode: 'xml',
+        theme: "ayu-dark",
+        lineNumbers: true,
+        autoCloseTags: true,
+        autoCloseBrackets: true,
+        lineWrapping: true,
+        scrollbarStyle: 'native',
+        undoDepth:100,
+    })
+    
+
+    var editorCSS = CodeMirror.fromTextArea(document.getElementById('cssCode'), {
+        mode: 'css',
+        theme: "ayu-dark",
+        lineNumbers: true,
+        autoCloseTags: true,
+        autoCloseBrackets: true,
+        lineWrapping: true,
+        scrollbarStyle: 'native',
+        undoDepth:100,
+    })
+
+    var editorJS = CodeMirror.fromTextArea(document.getElementById('javascriptCode'), {
+        mode: 'javascript',
+        theme: "ayu-dark",
+        lineNumbers: true,
+        autoCloseTags: true,
+        autoCloseBrackets: true,
+        lineWrapping: true,
+        scrollbarStyle: 'native',
+        undoDepth:100,
+    })
+
+
+
+    let htmlEditor = "";
+    let cssEditor = "";
+    let jsEditor = "";
+
+
+
+
+
+        editorHTML.on('change', (editor)=> {
+        htmlEditor = editor.doc.getValue()
+        update()
+    })
+    editorCSS.on('change', (editor)=> {
+        cssEditor = editor.doc.getValue()
+        update()
+    })
+    editorJS.on('change', (editor)=> {
+        jsEditor = editor.doc.getValue()
+        update()
+    })
+    function update(){
+        let text = htmlEditor + "<style>" + cssEditor + "</style>" + "<scri" + "pt>" + jsEditor + "</scri" + "pt>";
+        console.log(htmlEditor,cssEditor,jsEditor)
+        let iframe = document.getElementById('viewer').contentWindow.document;
+        iframe.open();
+        iframe.write(`${text}`);
+        iframe.close();
+        let srcDoc ;
+        
+
+        iframe.srcdoc = srcDoc;
+    }
+
+</script>
+<script src="./scripts/main_section.js"></script>
