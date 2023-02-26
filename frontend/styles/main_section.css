@@ -94,3 +94,11 @@ iframe{
     background: #fff;
     border: none;
 }
+
+.html_editor, .css_editor, .js_editor{
+  height: 33.33%;
+  min-height: 50px;
+}
+.js_editor{
+  /* flex: 1; */
+}
