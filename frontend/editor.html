@@ -39,6 +39,14 @@
     <title>Edito - Online Text Editor</title>
     <link rel="stylesheet" href="./styles/main_section.css">
 
+    <!-- ----------Socket cdn------------ -->
+    <script
+    src="https://cdn.socket.io/3.1.3/socket.io.min.js"
+    integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"
+    crossorigin="anonymous"
+  ></script>
+  <!-- ========alert======== -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -316,18 +324,21 @@
     let cssEditor = "";
     let jsEditor = "";
 
-    editorHTML.on('change', (editor) => {
-        htmlEditor = editor.doc.getValue()
-        update()
-    })
-    editorCSS.on('change', (editor) => {
-        cssEditor = editor.doc.getValue()
-        update()
-    })
-    editorJS.on('change', (editor) => {
-        jsEditor = editor.doc.getValue()
-        update()
-    })
+    editorHTML.on("keyup", (editor) => {
+    htmlEditor = editor.doc.getValue();
+    codeEmithtml(htmlEditor);
+    update();
+  });
+  editorCSS.on("keyup", (editor) => {
+    cssEditor = editor.doc.getValue();
+    codeEmitcss(cssEditor);
+    update();
+  });
+  editorJS.on("keyup", (editor) => {
+    jsEditor = editor.doc.getValue();
+    codeEmitjs(jsEditor);
+    update();
+  });
 
 
     function update() {
@@ -343,7 +354,55 @@
         iframe.srcdoc = srcDoc;
     }
 
-    
+     //------------ Socket.io --------------
+  const urlParams = new URLSearchParams(window.location.search);
+
+const username = urlParams.get("username");
+const room_id = urlParams.get("editioID");
+const socket = io("http://localhost:3000/", { transports: ["websocket"] });
+
+console.log(username, room_id);
+
+socket.emit("join", { username, room_id });
+
+function codeEmithtml(code) {
+  socket.emit("code_change_html", { room_id, code });
+}
+function codeEmitcss(code) {
+  socket.emit("code_change_css", { room_id, code });
+}
+function codeEmitjs(code) {
+  socket.emit("code_change_js", { room_id, code });
+}
+
+socket.on("code_change_html", ({ code }) => {
+  console.log("html" + code);
+  editorHTML.getDoc().setValue(code);
+  htmlEditor = code;
+  update();
+});
+socket.on("code_change_css", ({ code }) => {
+  console.log("css" + code);
+  editorCSS.getDoc().setValue(code);
+  cssEditor = code;
+  update();
+});
+socket.on("code_change_js", ({ code }) => {
+  console.log("js" + code);
+  editorJS.getDoc().setValue(code);
+  jsEditor = code;
+  update();
+});
+
+socket.on("join", ({ username }) => {
+  console.log(username);
+  Swal.fire({
+    position: "top-end",
+    title: `${username} has joined`,
+    showConfirmButton: false,
+    timer: 3000,
+  });
+});
 
 </script>
 <script src="./scripts/main_section.js"></script>

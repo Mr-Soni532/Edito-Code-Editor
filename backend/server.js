@@ -39,25 +39,35 @@ io.on('connection', (socket) => {
     console.log('socket connected', socket.id);
 
 
-    socket.on("join", (room_id, username) => {
+    socket.on("join", ({room_id, username}) => {
+        console.log(room_id, username);
         // storing users with unique socket id
         user_socket_map[socket.id] = username;
         // joining room 
         socket.join(room_id);
         // getting all the clients for the room
-        const clients = getAllConnectedClients(room_id);
-        clients.forEach(({ socketId }) => {
-            io.to(socketId).emit("join", {
-                clients,
-                username,
-                socketId: socket.id,
-            });
-        });
+        // const clients = getAllConnectedClients(room_id);
+        // clients.forEach(({ socketId }) => {
+        //     io.to(socketId).emit("join", {
+        //         clients,
+        //         username,
+        //         socketId: socket.id,
+        //     });
+        // });
+        socket.broadcast.to(room_id).emit("join",{username});
     });
 
-    // event for emitting the code_change 
-    socket.on("code_change", (room_id, code ) => {
-        socket.in(room_id).emit("code_change", { code });
+     // event for emitting the code_change 
+     socket.on("code_change_html", ({room_id, code }) => {
+        socket.broadcast.to(room_id).emit("code_change_html",{code})
+        // socket.in(room_id).emit("code_change", { code });
+    });
+    socket.on("code_change_css", ({room_id, code }) => {
+        socket.broadcast.to(room_id).emit("code_change_css",{code})
+        
+    });
+    socket.on("code_change_js", ({room_id, code }) => {
+        socket.broadcast.to(room_id).emit("code_change_js",{code})
     });
 
     // this event is syncing all the code
