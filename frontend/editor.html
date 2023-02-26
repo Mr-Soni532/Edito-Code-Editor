@@ -141,15 +141,15 @@
         <div class="resizable-x">
             <div class="resizable-y" style="flex: 50%;">
                 <div class="html_editor" style="height: 33.33%;min-height: 50px;">
-                    <textarea id="htmlCode" placeholder="Type HTML code here" ></textarea>
+                    <textarea id="htmlCode" placeholder="Type HTML code here"></textarea>
                 </div>
                 <div class="resizer-y resizer-y-1"></div>
                 <div class="css_editor" style="height: 33.33%;min-height: 50px;">
-                    <textarea id="cssCode" placeholder="Type CSS code here" ></textarea>
+                    <textarea id="cssCode" placeholder="Type CSS code here"></textarea>
                 </div>
                 <div class="resizer-y resizer-y-2"></div>
                 <div class="js_editor" style="height: 33.33%;min-height: 50px;">
-                    <textarea id="javascriptCode" placeholder="Type JavaScript code here" ></textarea>
+                    <textarea id="javascriptCode" placeholder="Type JavaScript code here"></textarea>
                 </div>
             </div>
             <div class="resizer-x"></div>
@@ -201,9 +201,9 @@
         autoCloseBrackets: true,
         lineWrapping: true,
         scrollbarStyle: 'native',
-        undoDepth:100,
+        undoDepth: 100,
     })
-    
+
 
     var editorCSS = CodeMirror.fromTextArea(document.getElementById('cssCode'), {
         mode: 'css',
@@ -213,7 +213,7 @@
         autoCloseBrackets: true,
         lineWrapping: true,
         scrollbarStyle: 'native',
-        undoDepth:100,
+        undoDepth: 100,
     })
 
     var editorJS = CodeMirror.fromTextArea(document.getElementById('javascriptCode'), {
@@ -224,7 +224,7 @@
         autoCloseBrackets: true,
         lineWrapping: true,
         scrollbarStyle: 'native',
-        undoDepth:100,
+        undoDepth: 100,
     })
 
 
@@ -237,29 +237,25 @@
 
 
 
-        editorHTML.on('change', (editor)=> {
+    editorHTML.on('change', (editor) => {
         htmlEditor = editor.doc.getValue()
         update()
     })
-    editorCSS.on('change', (editor)=> {
+    editorCSS.on('change', (editor) => {
         cssEditor = editor.doc.getValue()
         update()
     })
-    editorJS.on('change', (editor)=> {
+    editorJS.on('change', (editor) => {
         jsEditor = editor.doc.getValue()
         update()
     })
-    function update(){
+    function update() {
         let text = htmlEditor + "<style>" + cssEditor + "</style>" + "<scri" + "pt>" + jsEditor + "</scri" + "pt>";
-        console.log(htmlEditor,cssEditor,jsEditor)
+        console.log(htmlEditor, cssEditor, jsEditor)
         let iframe = document.getElementById('viewer').contentWindow.document;
         iframe.open();
         iframe.write(`${text}`);
         iframe.close();
-        let srcDoc ;
-        
-
-        iframe.srcdoc = srcDoc;
     }
 
 </script>
