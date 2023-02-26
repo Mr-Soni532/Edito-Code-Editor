@@ -1,65 +1,83 @@
+//Importing Modules
+const express =  require("express");
 const http = require("http");
-const path = require("path");
-const express = require("express");
-const socket = require("socket.io");
-const port = 3000;
+const socketIo = require("socket.io");
+require("dotenv").config();
 
+//Creating Server
 const app = express();
 const server = http.createServer(app);
-const io = socket(server);
+const io = socketIo(server);
+
+app.get("/", (req, res)=>{
+    res.send("Home");
+})
 
 
-let state = {
-  files: [
-    {
-      name: "index.html",
-      content:
-        `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-      
-</body>
-</html>`,
-    },
-  ],
-  active: 0,
-  mode: "htmlmixed",
-};
+// object for storing all the users with socket id
+const user_socket_map = {};
 
-io.on("connection", (socket) => {
-  console.log(`client is connected ${socket.id}`);
-  io.emit("broadcast", state);
 
-  socket.on("emit", (arg) => {
-    state = arg;
-    socket.broadcast.emit("broadcast", state);
-  });
+// function for getting the connecting clients for a separate room
+function getAllConnectedClients(room_id) {
+    return Array.from(io.sockets.adapter.rooms.get(room_id) || []).map(
+        (socket_id) => {
+            return {
+                socket_id,
+                username: user_socket_map[socket_id],
+            };
+        }
+    );
+}
 
-  socket.on("disconnect", () => {
-    console.log(`client is disconnected ${socket.id}`);
-  });
+
+// Connection made
+io.on('connection', (socket) => {
+    console.log('socket connected', socket.id);
+
+
+    socket.on("join", (room_id, username) => {
+        // storing users with unique socket id
+        user_socket_map[socket.id] = username;
+        // joining room 
+        socket.join(room_id);
+        // getting all the clients for the room
+        const clients = getAllConnectedClients(room_id);
+        clients.forEach(({ socketId }) => {
+            io.to(socketId).emit("join", {
+                clients,
+                username,
+                socketId: socket.id,
+            });
+        });
+    });
+
+    // event for emitting the code_change 
+    socket.on("code_change", (room_id, code ) => {
+        socket.in(room_id).emit("code_change", { code });
+    });
+
+    // this event is syncing all the code
+    socket.on("sync_code", (socketId, code) => {
+        io.to(socketId).emit("code_change", { code });
+    });
+
+    // disconnect event
+    socket.on('disconnecting', () => {
+        const rooms = [...socket.rooms];
+        rooms.forEach((room_id) => {
+            // emitting the 'disconnected event to frontend
+            socket.in(room_id).emit("disconnected", {
+                socketId: socket.id,
+                username: user_socket_map[socket.id],
+            });
+        });
+        // deleting the clientDetails after disconnecting
+        delete user_socket_map[socket.id];
+        socket.leave();
+    });
 });
 
-// SPA
-app.use(
-  "/public",
-  express.static(
-    path.join(__dirname, "collaborative-code-editor-client", "public")
-  )
-);
-
-app.get("*", (_req, res) => {
-  res.sendFile(
-    path.resolve(__dirname, "collaborative-code-editor-client", "index.html")
-  );
-});
-
-server.listen(port, () => {
-  console.log(`Server is listening on port: http://localhost:${port}`);
-});
+server.listen(process.env.port, ()=>{
+    console.log(`Serving at http://localhost:${process.env.port}`);
+})
