@@ -38,7 +38,7 @@ nav {
 }
 
 #nav_logo {
-  width: 30%;
+  width: 20%;
 }
 
 #logo img {
@@ -46,10 +46,10 @@ nav {
 }
 
 #nav_container {
-  width: 70%;
+  width: 80%;
   height: 100%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-end;
   align-items: center;
 }
 
@@ -89,6 +89,19 @@ nav {
   color: var(--dark-color-c);
   font-weight: 600;
 }
+/* ========\ Theme btn /========== */
+.theme_btn{
+  background: var(--dark-color-c);
+  padding: 8px 15px;
+  border-radius: 4px;
+  font-weight: 500;
+  margin-left: 30px;
+  cursor: pointer;
+}
+.theme_btn>i{
+ margin-right: 5px;
+}
+
 /* ========\ view dropdown /========== */
 .dropbtn {
   background: var(--dark-color-c);
@@ -101,6 +114,7 @@ nav {
   justify-content: center;
   /* border: 1px solid #dfdfdf; */
   padding: 8px 15px;
+  margin-left: 30px;
 }
 
 .dropbtn>i {
