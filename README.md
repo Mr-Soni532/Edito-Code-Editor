@@ -13,6 +13,21 @@ This is a web application that provides a real-time code editor with three windo
 - CSS
 - JavaScript
 
+### Images:
+
+### Join Page
+
+![loginpage](https://user-images.githubusercontent.com/114161535/221492316-cf4cffe3-5bb1-41ed-aaa0-9ad6110c7301.png)
+
+### Layout 1
+![layout1](https://user-images.githubusercontent.com/114161535/221492326-9bbb5021-9b63-419d-aa27-99143e71b462.png)
+
+### Layout 2
+![layout2](https://user-images.githubusercontent.com/114161535/221492328-50b49880-a0b2-495f-99fb-9beb829debe1.png)
+
+### Layout 3
+![layout3](https://user-images.githubusercontent.com/114161535/221492332-770593b4-39fe-41c6-ad70-7a7deeb63f91.png)
+
 ### Installation
 1. Clone the repository from GitHub:
 
