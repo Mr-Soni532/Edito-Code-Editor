@@ -1,5 +1,4 @@
-const layout_1 = `
-<section class="main_section layout_1" id="main_section">
+export const layout_1 = `
 <div class="resizable-x" style="flex-direction: row-reverse;">
     <div class="output_iframe_section" style="flex: 50%;">
         <iframe id="viewer"></iframe>
@@ -20,10 +19,8 @@ const layout_1 = `
         </div>
     </div>
 </div>
-</section>
 `
-const layout_2 = `
-<section class="main_section layout_2" id="main_section">
+export const layout_2 = `
         <div class="resizable-x">
             <div class="output_iframe_section" style="flex: 50%;">
                 <iframe id="viewer"></iframe>
@@ -44,9 +41,8 @@ const layout_2 = `
                 </div>
             </div>
         </div>
-    </section>
 `
-const layout_3 = `
+export const layout_3 = `
 <div class="resizable-y l-3">
             <div class="output_iframe_section l-3" style="flex: 50%;">
                 <iframe id="viewer"></iframe>
@@ -75,7 +71,5 @@ const layout_3 = `
                 </div>
             </div>
         </div>
-    </section>
 `
 
-export{layout_1,layout_2,layout_3}

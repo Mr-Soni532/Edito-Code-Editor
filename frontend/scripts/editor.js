@@ -1,4 +1,15 @@
 
+// =========== Storage Variable ========
+let live_code = false;
+let htmlEditor = "";
+let cssEditor = "";
+let jsEditor = "";
+let editorHTML;
+let editorCSS;
+let editorJS;
+
+// ===============================
+
 let sidebar = document.querySelector(".sidebar");
 let closeBtn = document.querySelector("#btn");
 
@@ -7,7 +18,18 @@ closeBtn.addEventListener("click", () => {
     menuBtnChange();//calling the function(optional)
 });
 
+let runOnClick = document.getElementById('runOnClick')
+let runLive = document.getElementById('runLive')
 
+runOnClick.addEventListener('click', () => {
+    update();
+    // style
+})
+runLive.addEventListener('click', () => {
+    live_code = live_code?false:true;
+    // style
+    runLive.classList.toggle('execution_active')
+})
 
 // following are the code to change sidebar button(optional)
 function menuBtnChange() {
@@ -21,78 +43,84 @@ function menuBtnChange() {
 
 
 
+
 // CodeMirror Code ==========>>>>>>>>>>>>>>>>
-var editorHTML = CodeMirror.fromTextArea(document.getElementById('htmlCode'), {
-    mode: 'xml',
-    theme: "ayu-dark",
-    lineNumbers: true,
-    autoCloseTags: true,
-    autoCloseBrackets: true,
-    lineWrapping: true,
-    scrollbarStyle: 'native',
-    undoDepth: 100,
-    extraKeys: { "Ctrl-Space": "autocomplete" }
-})
 
+codeMirror_config();
 
-var editorCSS = CodeMirror.fromTextArea(document.getElementById('cssCode'), {
-    mode: 'css',
-    theme: "ayu-dark",
-    lineNumbers: true,
-    autoCloseTags: true,
-    autoCloseBrackets: true,
-    lineWrapping: true,
-    scrollbarStyle: 'native',
-    undoDepth: 100,
-    extraKeys: { "Ctrl-Space": "autocomplete" }
-})
+function codeMirror_config() {
+    editorHTML = CodeMirror.fromTextArea(document.getElementById('htmlCode'), {
+        mode: 'xml',
+        theme: "ayu-dark",
+        lineNumbers: true,
+        autoCloseTags: true,
+        autoCloseBrackets: true,
+        lineWrapping: true,
+        scrollbarStyle: 'native',
+        undoDepth: 100,
+        extraKeys: { "Ctrl-Space": "autocomplete" },
+        autoRefresh: true
+    })
+    // editorHTML.refresh()
 
-var editorJS = CodeMirror.fromTextArea(document.getElementById('javascriptCode'), {
-    mode: 'javascript',
-    theme: "ayu-dark",
-    lineNumbers: true,
-    autoCloseTags: true,
-    autoCloseBrackets: true,
-    lineWrapping: true,
-    scrollbarStyle: 'native',
-    undoDepth: 100,
-    extraKeys: { "Ctrl-Space": "autocomplete" }
-})
+    editorCSS = CodeMirror.fromTextArea(document.getElementById('cssCode'), {
+        mode: 'css',
+        theme: "ayu-dark",
+        lineNumbers: true,
+        autoCloseTags: true,
+        autoCloseBrackets: true,
+        lineWrapping: true,
+        scrollbarStyle: 'native',
+        undoDepth: 100,
+        extraKeys: { "Ctrl-Space": "autocomplete" }
+    })
 
+    editorJS = CodeMirror.fromTextArea(document.getElementById('javascriptCode'), {
+        mode: 'javascript',
+        theme: "ayu-dark",
+        lineNumbers: true,
+        autoCloseTags: true,
+        autoCloseBrackets: true,
+        lineWrapping: true,
+        scrollbarStyle: 'native',
+        undoDepth: 100,
+        extraKeys: { "Ctrl-Space": "autocomplete" },
 
+    })
 
-let htmlEditor = "";
-let cssEditor = "";
-let jsEditor = "";
+    editorHTML.on("keyup", (editor) => {
+        htmlEditor = editor.doc.getValue();
+        // codeEmithtml(htmlEditor);
+        if (live_code) update();
+    });
+    editorCSS.on("keyup", (editor) => {
+        cssEditor = editor.doc.getValue();
+        // codeEmitcss(cssEditor);
+        if (live_code) update();
+    });
+    editorJS.on("keyup", (editor) => {
+        jsEditor = editor.doc.getValue();
+        // codeEmitjs(jsEditor);
+        if (live_code) update();
+    });
+}
 
-editorHTML.on("keyup", (editor) => {
-    htmlEditor = editor.doc.getValue();
-    codeEmithtml(htmlEditor);
-    update();
-});
-editorCSS.on("keyup", (editor) => {
-    cssEditor = editor.doc.getValue();
-    codeEmitcss(cssEditor);
-    update();
-});
-editorJS.on("keyup", (editor) => {
-    jsEditor = editor.doc.getValue();
-    codeEmitjs(jsEditor);
-    update();
-});
 
 
 function update() {
-    let text = htmlEditor + "<style>" + cssEditor + "</style>" + "<scri" + "pt>" + jsEditor + "</scri" + "pt>";
+    let text = htmlEditor + "<style>" + cssEditor + "</style>" + "<script>" + jsEditor + "<\/script>";
     console.log(htmlEditor, cssEditor, jsEditor)
     let iframe = document.getElementById('viewer').contentWindow.document;
     iframe.open();
     iframe.write(`${text}`);
     iframe.close();
     let srcDoc;
-
-
     iframe.srcdoc = srcDoc;
+}
+function setLocalValue() {
+    editorHTML.getDoc().setValue(htmlEditor);
+    editorCSS.getDoc().setValue(cssEditor);
+    editorJS.getDoc().setValue(jsEditor);
 }
 
 //------------ Socket.io --------------
@@ -158,3 +186,5 @@ function update() {
 //         timer: 3000,
 //     });
 // });
+
+export { codeMirror_config, setLocalValue }
