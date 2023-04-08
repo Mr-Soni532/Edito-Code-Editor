@@ -1,10 +1,16 @@
 import { resizerFunction } from "./resizer.js";
 
+const urlParams = new URLSearchParams(window.location.search);
+const username = urlParams.get("username");
+const roomId = urlParams.get("editoID");
+const roomId_btn = document.querySelector('#roomid_section')
+const saveOnClick = document.querySelector('#saveOnClick')
+const HOST = 'http://localhost:3000'
 // =========== Storage Variable ========
-let live_code = false;
-let htmlEditor = "";
-let cssEditor = "";
-let jsEditor = "";
+let liveFlag = localStorage.getItem('live_Flag') || true;
+let htmlCode = "";
+let cssCode = "";
+let jsCode = "";
 let editorHTML;
 let editorCSS;
 let editorJS;
@@ -13,14 +19,18 @@ let editorJS;
 resizerFunction()
 // ===============================
 
+
+// Side menu toggler
 let sidebar = document.querySelector(".sidebar");
-let closeBtn = document.querySelector("#btn");
+let closeBtn = document.querySelector("#sidebar-controller");
 
 closeBtn.addEventListener("click", () => {
     sidebar.classList.toggle("open");
     menuBtnChange();//calling the function(optional)
 });
 
+
+// Code Execution funcitonality
 let runOnClick = document.getElementById('runOnClick')
 let runLive = document.getElementById('runLive')
 
@@ -29,9 +39,17 @@ runOnClick.addEventListener('click', () => {
     // style
 })
 runLive.addEventListener('click', () => {
-    live_code = live_code?false:true;
+    liveFlag = liveFlag ? false : true;
+    localStorage.setItem('liveFlag', liveFlag)
     // style
-    runLive.classList.toggle('execution_active')
+    if (liveFlag) {
+        runLive.classList.remove('btn-light')
+        runLive.classList.add('btn-danger')
+    } else {
+        runLive.classList.remove('btn-danger')
+        runLive.classList.add('btn-light')
+
+    }
 })
 
 // following are the code to change sidebar button(optional)
@@ -85,30 +103,35 @@ function codeMirror_config() {
         scrollbarStyle: 'native',
         undoDepth: 100,
         extraKeys: { "Ctrl-Space": "autocomplete" },
+        lint: true,
+        gutters: ["CodeMirror-lint-markers"],
+        hintOptions: {
+            completeSingle: true
+        }
     })
 
     editorHTML.on("keyup", (editor) => {
-        htmlEditor = editor.doc.getValue();
-        codeEmithtml(htmlEditor);
-        if (live_code) update();
+        htmlCode = editor.doc.getValue();
+        emitHtmlCode(htmlCode);
+        if (liveFlag) update();
     });
     editorCSS.on("keyup", (editor) => {
-        cssEditor = editor.doc.getValue();
-        codeEmitcss(cssEditor);
-        if (live_code) update();
+        cssCode = editor.doc.getValue();
+        emitCssCode(cssCode);
+        if (liveFlag) update();
     });
     editorJS.on("keyup", (editor) => {
-        jsEditor = editor.doc.getValue();
-        codeEmitjs(jsEditor);
-        if (live_code) update();
+        jsCode = editor.doc.getValue();
+        emitJsCode(jsCode);
+        if (liveFlag) update();
     });
 }
 
 
 
 function update() {
-    let text = htmlEditor + "<style>" + cssEditor + "</style>" + "<script>" + jsEditor + "<\/script>";
-    console.log(htmlEditor, cssEditor, jsEditor)
+    let text = htmlCode + "<style>" + cssCode + "</style>" + "<script>" + jsCode + "<\/script>";
+    // console.log(htmlCode, cssCode, jsCode)
     let iframe = document.getElementById('viewer').contentWindow.document;
     iframe.open();
     iframe.write(`${text}`);
@@ -117,73 +140,122 @@ function update() {
     iframe.srcdoc = srcDoc;
 }
 function setLocalValue() {
-    editorHTML.getDoc().setValue(htmlEditor);
-    editorCSS.getDoc().setValue(cssEditor);
-    editorJS.getDoc().setValue(jsEditor);
+    editorHTML.getDoc().setValue(htmlCode);
+    editorCSS.getDoc().setValue(cssCode);
+    editorJS.getDoc().setValue(jsCode);
 }
 
 //------------ Socket.io --------------
-const urlParams = new URLSearchParams(window.location.search);
 
-const username = urlParams.get("username");
-const room_id = urlParams.get("editoID");
 const socket = io("http://localhost:3000/", { transports: ["websocket"] });
 
+// document.getElementById("currentRoom").innerText = roomId;
+// document.getElementById("currentUser").innerText = username;
 
-document.getElementById("currentRoom").innerText = room_id;
-document.getElementById("currentUser").innerText = username;
 
-console.log(username, room_id);
+// console.log(username, roomId);
 
-socket.emit("join", { username, room_id });
+socket.emit("joinRoom", { username, roomId });
 
-function codeEmithtml(code) {
-    socket.emit("code_change_html", { room_id, code });
+socket.on('wlcm-message', (val) => console.log(val))
+
+// run on every new connection
+socket.on('renderCurrentCode', async () => {
+    let res = await fetch(`${HOST}/fetchCode/${roomId}`)
+    let { roomCode } = await res.json();
+    editorHTML.getDoc().setValue(roomCode.htmlCode)
+    editorCSS.getDoc().setValue(roomCode.cssCode)
+    editorJS.getDoc().setValue(roomCode.jsCode)
+    htmlCode = roomCode.htmlCode;
+    cssCode = roomCode.cssCode;
+    jsCode = roomCode.jsCode;
+    update()
+})
+
+socket.on('newUserAlert', (username) => {
+    document.querySelector('#liveToast').classList.add('show')
+    document.querySelector('#toast-msg').innerText = `${username} has joined this workspace.`
+    setTimeout(() => {
+        document.querySelector('#liveToast').classList.remove('show')
+    }, 2000);
+})
+
+
+function emitHtmlCode(code) {
+    socket.emit("code_change_html", { roomId, code });
 }
-function codeEmitcss(code) {
-    socket.emit("code_change_css", { room_id, code });
+function emitCssCode(code) {
+    socket.emit("code_change_css", { roomId, code });
 }
-function codeEmitjs(code) {
-    socket.emit("code_change_js", { room_id, code });
+function emitJsCode(code) {
+    socket.emit("code_change_js", { roomId, code });
 }
 
 socket.on("code_change_html", ({ code }) => {
-    console.log("html" + code);
+
     editorHTML.getDoc().setValue(code);
-    htmlEditor = code;
+    htmlCode = code;
     update();
 });
 socket.on("code_change_css", ({ code }) => {
     console.log("css" + code);
     editorCSS.getDoc().setValue(code);
-    cssEditor = code;
+    cssCode = code;
     update();
 });
 socket.on("code_change_js", ({ code }) => {
     console.log("js" + code);
     editorJS.getDoc().setValue(code);
-    jsEditor = code;
+    jsCode = code;
     update();
 });
 
-socket.on("join", ({ username, clients }) => {
-    console.log(username);
-    // console.log(users)
+socket.on("roomUsers", ({ users }) => {
+
     let doc = document.getElementById("appendItems");
-    clients.forEach((el) => {
+    document.getElementById("userCount").innerText = users.length
+    doc.innerHTML = "";
+    users.forEach((el) => {
         const newClient = document.createElement("li");
         newClient.innerHTML = `<a href="#">
-                    <i class='bx bx-user'></i>
+        <i class="fa-regular fa-user"></i>
                     <span class="links_name">${el.username}</span>
                 </a>`;
         doc.append(newClient)
     })
-    Swal.fire({
-        position: "top-end",
-        title: `${username} has joined`,
-        showConfirmButton: false,
-        timer: 3000,
-    });
+
 });
+
+
+//============> Toast activity
+roomId_btn.addEventListener('click', () => {
+    navigator.clipboard.writeText(roomId)
+    document.querySelector('#liveToast').classList.add('show')
+    document.querySelector('#toast-msg').innerText = 'Room Id copied in clipboard!'
+    setTimeout(() => {
+        document.querySelector('#liveToast').classList.remove('show')
+    }, 2000);
+})
+
+//============> Save Code Handler
+saveOnClick.addEventListener('click', async () => {
+    document.querySelector(`#saveOnClick>i`).style.display = 'none';
+    document.querySelector(`#saveOnClick>span`).style.display = 'inline-block';
+    let res = await fetch(`${HOST}/saveCode`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            roomId, htmlCode, cssCode, jsCode
+        })
+    }).finally(()=>{
+        document.querySelector(`#saveOnClick>i`).style.display = 'inline-block';
+        document.querySelector(`#saveOnClick>span`).style.display = 'none';
+    })
+})
+
+
+
 
 export { codeMirror_config, setLocalValue }

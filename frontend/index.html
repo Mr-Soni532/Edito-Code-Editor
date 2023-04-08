@@ -53,16 +53,4 @@
 </body>
 
 </html>
-
-<script>
-    let newID = document.getElementById("createNewID").addEventListener("click",fun);
-
-
-    async function fun(e){
-        e.preventDefault();
-        let res = await fetch("http://localhost:3000/getNewID");
-        let data = await res.json();
-        // console.log(id)
-        document.getElementById("editoID").value=data.id;
-    }
-</script>
+<script src="./scripts/index.js"></script>
