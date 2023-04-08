@@ -1,6 +1,6 @@
 const CodeModel = require("../model/code.model");
 const { v4: uuidv4 } = require('uuid');
-
+const sampleTemplate = require('../utils/sampleTemplate')
 exports.serverTesting = (req, res) => {
     res.send({ msg: "edito server working fine." });
 }
@@ -9,7 +9,16 @@ exports.fetchCodeByRoomId = async (req, res) => {
     const roomId = req.params.roomId;
     try {
         let roomCode = await CodeModel.findOne({ roomId })
-        res.send({ roomCode })
+        if (roomCode){
+            res.send({ roomCode })
+        }
+        else {
+            res.send({roomCode: {
+                htmlCode: sampleTemplate.html(),
+                cssCode: sampleTemplate.css(),
+                jsCode: ''
+            }})
+        }
     } catch (error) {
         res.status(500).send({ msg: 'Something went wrong while fetching code.' })
     }
@@ -26,7 +35,7 @@ exports.saveCode = async (req, res) => {
             await roomCode.save();
             res.status(201).send({ msg: 'Code saved successfully.' })
         } else {
-            const newCode = new Code({
+            const newCode = new CodeModel({
                 roomId,
                 htmlCode,
                 cssCode,
@@ -37,6 +46,7 @@ exports.saveCode = async (req, res) => {
         }
     } catch (error) {
         res.status(500).send({ msg: 'Something went wrong while saving code.' })
+        console.log(error)
     }
 }
 
