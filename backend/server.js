@@ -1,103 +1,88 @@
 //Importing Modules
-const express =  require("express");
+const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
 const { v4: uuidv4 } = require('uuid');
-var cors = require('cors')
+const { userJoin, getRoomUsers, userLeave } = require("./utils/users");
+const app = express();
+let cors = require('cors');
 require("dotenv").config();
 
-//Creating Server
-const app = express();
 app.use(cors());
+
 const server = http.createServer(app);
 const io = socketIo(server);
-let users = [];
-app.get("/", (req, res)=>{
-    res.send("Home");
+
+//Testing endpoint
+app.get("/", (req, res) => {
+    res.send({ msg: "edito server working fine." });
 })
 
-
-// object for storing all the users with socket id
-const user_socket_map = {};
-
-
-// function for getting the connecting clients for a separate room
-function getAllConnectedClients(room_id) {
-    return Array.from(io.sockets.adapter.rooms.get(room_id) || []).map(
-        (socket_id) => {
-            return {
-                socket_id,
-                username: user_socket_map[socket_id],
-            };
-        }
-    );
-}
-
-
-// Connection made
+// execute when connection is established 
 io.on('connection', (socket) => {
-    // console.log('socket connected', socket.id);
 
+    socket.on("joinRoom", ({ username, roomId }) => {
 
-    socket.on("join", ({room_id, username}) => {
-        // console.log(room_id, username);
-        // storing users with unique socket id
-        user_socket_map[socket.id] = username;
-        // joining room 
-        console.log(users)
-        socket.join(room_id);
-        // getting all the clients for the room
-        const clients = getAllConnectedClients(room_id);
-        clients.forEach(({ socketId }) => {
-            io.to(socketId).emit("join", {
-                clients,
-                username,
-                socketId: socket.id,
-            });
-        });
-        // io.to(room_id).emit("join",{username,clients});
+        const user = userJoin(socket.id, username, roomId)
+        socket.join(user.roomId);
+
+        // Welcome Current user
+        socket.emit('wlcm-message', `Welcome ${user.username}`)
+
+        // Broadcast message
+        socket.broadcast.to(user.roomId).emit('newUserAlert', user.username +' '+`has joined the workspace.`)
+
+        // get all Users and room info
+        io.to(user.roomId).emit('roomUsers', {
+            users: getRoomUsers(user.roomId)
+        })
+
     });
 
-     // event for emitting the code_change 
-     socket.on("code_change_html", ({room_id, code }) => {
-        socket.broadcast.to(room_id).emit("code_change_html",{code})
-        // socket.in(room_id).emit("code_change", { code });
-    });
-    socket.on("code_change_css", ({room_id, code }) => {
-        socket.broadcast.to(room_id).emit("code_change_css",{code})
-        
-    });
-    socket.on("code_change_js", ({room_id, code }) => {
-        socket.broadcast.to(room_id).emit("code_change_js",{code})
+    // event for emitting the code_change 
+
+    //! HTML
+    socket.on("code_change_html", ({ roomId, code }) => {
+        socket.broadcast.to(roomId).emit("code_change_html", { code })
     });
 
-    // this event is syncing all the code
+    //! CSS
+    socket.on("code_change_css", ({ roomId, code }) => {
+        socket.broadcast.to(roomId).emit("code_change_css", { code })
+    });
+
+    //! JavaScript
+    socket.on("code_change_js", ({ roomId, code }) => {
+        socket.broadcast.to(roomId).emit("code_change_js", { code })
+    });
+
+    // event for code sync
     socket.on("sync_code", (socketId, code) => {
-        io.to(socketId).emit("code_change", { code });
+        socket.broadcast.to(socketId).emit("code_change", { code });
     });
 
     // disconnect event
-    socket.on('disconnecting', () => {
-        const rooms = [...socket.rooms];
-        rooms.forEach((room_id) => {
-            // emitting the 'disconnected event to frontend
-            socket.in(room_id).emit("disconnected", {
-                socketId: socket.id,
-                username: user_socket_map[socket.id],
-            });
-        });
-        // deleting the clientDetails after disconnecting
-        delete user_socket_map[socket.id];
+    socket.on('disconnect', () => {
+        // Alert to all clients
+        const user = userLeave(socket.id)
+        if (user) {
+            // send user and room info
+            io.to(user.roomId).emit('roomUsers', {
+                room: user.roomId,
+                users: getRoomUsers(user.roomId)
+            })
+            io.to(user.roomId).emit('leftMessage', user.username + 'has left the workspace')
+        }
         socket.leave();
-    });
+    })
 });
 
-app.get("/getNewID",(req,res)=>{
+app.get("/getNewID", (req, res) => {
     // res.cookie('editoID', `${uuidv4()}`).send('cookie set');
-    let id=uuidv4();
-    res.send({id});
+    let id = uuidv4();
+    res.send({ id });
 })
 
-server.listen(process.env.port, ()=>{
+server.listen(process.env.port, () => {
     console.log(`Serving at http://localhost:${process.env.port}`);
 })
