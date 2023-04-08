@@ -1,8 +1,8 @@
 const users = [];
 
 // Join user to workspace
-function userJoin(id, username, room) {
-    const user = { id, username, room }
+function userJoin(id, username, roomId) {
+    const user = { id, username, roomId }
     users.push(user);
     return user;
 }
@@ -20,8 +20,8 @@ function userLeave(id) {
 }
 
 // Get room users
-function getRoomUsers(room) {
-    return users.filter(el => el.room === room)
+function getRoomUsers(roomId) {
+    return users.filter(el => el.roomId === roomId)
 }
 
 module.exports = {
