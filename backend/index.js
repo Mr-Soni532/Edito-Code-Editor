@@ -2,34 +2,36 @@
 const express = require("express");
 const http = require("http");
 const socket = require("./socket");
-
-const { v4: uuidv4 } = require('uuid');
-
-const app = express();
+const controller = require('./controllers/code.controller')
 let cors = require('cors');
-require("dotenv").config();
-
+const connectToMongo = require("./config/db");
+const app = express();
 app.use(cors());
 
+//=====> env variables
+require("dotenv").config();
+const PORT = process.env.port;
+
+//=====> Created Server
 const server = http.createServer(app);
 
-//Testing endpoint
-app.get("/", (req, res) => {
-    res.send({ msg: "edito server working fine." });
-})
+//==========> ROUTES
+app.get("/", controller.serverTesting)
 
-app.get("/getNewID", (req, res) => {
-    // res.cookie('editoID', `${uuidv4()}`).send('cookie set');
-    let id = uuidv4();
-    res.send({ id });
-})
+app.post('/saveCode', controller.saveCode)
+app.get('/fetchCode/:roomId', controller.fetchCodeByRoomId)
 
+app.get("/generateUUID", controller.generateUUID)
 
-// handling all socket logic 
+// =========> SOCKET LOGIC
 socket(server)
 
-
-
-server.listen(process.env.port, () => {
-    console.log(`Serving at http://localhost:${process.env.port}`);
+//=============> RUN SERVER
+server.listen(PORT, async () => {
+    try {
+        await connectToMongo();
+        console.log(`Gator backend @ port ${PORT}`)
+    } catch (error) {
+        console.log({msg: 'Something went wrong while listening the server ',error})
+    }
 })
