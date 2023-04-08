@@ -7,6 +7,7 @@ let cors = require('cors');
 const connectToMongo = require("./config/db");
 const app = express();
 app.use(cors());
+app.use(express.json())
 
 //=====> env variables
 require("dotenv").config();
@@ -30,7 +31,7 @@ socket(server)
 server.listen(PORT, async () => {
     try {
         await connectToMongo();
-        console.log(`Gator backend @ port ${PORT}`)
+        console.log(`Edito backend @ port ${PORT}`)
     } catch (error) {
         console.log({msg: 'Something went wrong while listening the server ',error})
     }
