@@ -197,4 +197,5 @@ iframe{
   height: 100%;
   width: 100%;
   resize: none;
+  clip-path: none !important;
 }
