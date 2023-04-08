@@ -14,7 +14,7 @@ module.exports = (server) => {
             socket.emit('wlcm-message', `Welcome ${user.username}`)
     
             // code sync for new user
-            // socket.emit('renderCurrentCode')
+            socket.emit('renderCurrentCode')
     
             // Broadcast message
             socket.broadcast.to(user.roomId).emit('newUserAlert', user.username)
