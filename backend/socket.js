@@ -14,10 +14,10 @@ module.exports = (server) => {
             socket.emit('wlcm-message', `Welcome ${user.username}`)
     
             // code sync for new user
-            socket.emit('codeSync')
+            // socket.emit('renderCurrentCode')
     
             // Broadcast message
-            socket.broadcast.to(user.roomId).emit('newUserAlert', user.username +' '+`has joined the workspace.`)
+            socket.broadcast.to(user.roomId).emit('newUserAlert', user.username)
     
             // get all Users and room info
             io.to(user.roomId).emit('roomUsers', {
