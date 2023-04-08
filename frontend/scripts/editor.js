@@ -4,8 +4,10 @@ const urlParams = new URLSearchParams(window.location.search);
 const username = urlParams.get("username");
 const roomId = urlParams.get("editoID");
 const roomId_btn = document.querySelector('#roomid_section')
+const saveOnClick = document.querySelector('#saveOnClick')
+const HOST = 'http://localhost:3000'
 // =========== Storage Variable ========
-let liveFlag = localStorage.getItem('live_Flag') || false;
+let liveFlag = localStorage.getItem('live_Flag') || true;
 let htmlCode = "";
 let cssCode = "";
 let jsCode = "";
@@ -40,7 +42,7 @@ runLive.addEventListener('click', () => {
     liveFlag = liveFlag ? false : true;
     localStorage.setItem('liveFlag', liveFlag)
     // style
-    if(liveFlag){
+    if (liveFlag) {
         runLive.classList.remove('btn-light')
         runLive.classList.add('btn-danger')
     } else {
@@ -161,9 +163,13 @@ socket.on('wlcm-message', (val) => console.log(val))
 socket.on('renderCurrentCode', async () => {
     let res = await fetch(`${HOST}/fetchCode/${roomId}`)
     let { roomCode } = await res.json();
-    emitHtmlCode(roomCode.htmlCode)
-    emitCssCode(roomCode.cssCode)
-    emitJsCode(roomCode.jsCode)
+    editorHTML.getDoc().setValue(roomCode.htmlCode)
+    editorCSS.getDoc().setValue(roomCode.cssCode)
+    editorJS.getDoc().setValue(roomCode.jsCode)
+    htmlCode = roomCode.htmlCode;
+    cssCode = roomCode.cssCode;
+    jsCode = roomCode.jsCode;
+    update()
 })
 
 socket.on('newUserAlert', (username) => {
@@ -217,12 +223,12 @@ socket.on("roomUsers", ({ users }) => {
                 </a>`;
         doc.append(newClient)
     })
-   
+
 });
 
 
-// toast activity
-roomId_btn.addEventListener('click', ()=>{
+//============> Toast activity
+roomId_btn.addEventListener('click', () => {
     navigator.clipboard.writeText(roomId)
     document.querySelector('#liveToast').classList.add('show')
     document.querySelector('#toast-msg').innerText = 'Room Id copied in clipboard!'
@@ -230,6 +236,25 @@ roomId_btn.addEventListener('click', ()=>{
         document.querySelector('#liveToast').classList.remove('show')
     }, 2000);
 })
+
+//============> Save Code Handler
+saveOnClick.addEventListener('click', async () => {
+    document.querySelector(`#saveOnClick>i`).style.display = 'none';
+    document.querySelector(`#saveOnClick>span`).style.display = 'inline-block';
+    let res = await fetch(`${HOST}/saveCode`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            roomId, htmlCode, cssCode, jsCode
+        })
+    }).finally(()=>{
+        document.querySelector(`#saveOnClick>i`).style.display = 'inline-block';
+        document.querySelector(`#saveOnClick>span`).style.display = 'none';
+    })
+})
+
 
 
 
