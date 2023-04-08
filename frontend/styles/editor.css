@@ -511,7 +511,7 @@ nav {
 
 .iframe-container {
   background: white;
-  width: 50%;
+  /* width: 50%; */
   height: 100vh;
   margin: 3px;
 }

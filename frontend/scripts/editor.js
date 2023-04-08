@@ -1,3 +1,4 @@
+import { resizerFunction } from "./resizer.js";
 
 // =========== Storage Variable ========
 let live_code = false;
@@ -8,6 +9,8 @@ let editorHTML;
 let editorCSS;
 let editorJS;
 
+// ===============================
+resizerFunction()
 // ===============================
 
 let sidebar = document.querySelector(".sidebar");
@@ -39,9 +42,6 @@ function menuBtnChange() {
         closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");//replacing the iocns class
     }
 }
-
-
-
 
 
 // CodeMirror Code ==========>>>>>>>>>>>>>>>>
@@ -85,22 +85,21 @@ function codeMirror_config() {
         scrollbarStyle: 'native',
         undoDepth: 100,
         extraKeys: { "Ctrl-Space": "autocomplete" },
-
     })
 
     editorHTML.on("keyup", (editor) => {
         htmlEditor = editor.doc.getValue();
-        // codeEmithtml(htmlEditor);
+        codeEmithtml(htmlEditor);
         if (live_code) update();
     });
     editorCSS.on("keyup", (editor) => {
         cssEditor = editor.doc.getValue();
-        // codeEmitcss(cssEditor);
+        codeEmitcss(cssEditor);
         if (live_code) update();
     });
     editorJS.on("keyup", (editor) => {
         jsEditor = editor.doc.getValue();
-        // codeEmitjs(jsEditor);
+        codeEmitjs(jsEditor);
         if (live_code) update();
     });
 }
@@ -124,67 +123,67 @@ function setLocalValue() {
 }
 
 //------------ Socket.io --------------
-// const urlParams = new URLSearchParams(window.location.search);
+const urlParams = new URLSearchParams(window.location.search);
 
-// const username = urlParams.get("username");
-// const room_id = urlParams.get("editoID");
-// const socket = io("http://localhost:3000/", { transports: ["websocket"] });
+const username = urlParams.get("username");
+const room_id = urlParams.get("editoID");
+const socket = io("http://localhost:3000/", { transports: ["websocket"] });
 
 
-// document.getElementById("currentRoom").innerText = room_id;
-// document.getElementById("currentUser").innerText = username;
+document.getElementById("currentRoom").innerText = room_id;
+document.getElementById("currentUser").innerText = username;
 
-// console.log(username, room_id);
+console.log(username, room_id);
 
-// socket.emit("join", { username, room_id });
+socket.emit("join", { username, room_id });
 
-// function codeEmithtml(code) {
-//     socket.emit("code_change_html", { room_id, code });
-// }
-// function codeEmitcss(code) {
-//     socket.emit("code_change_css", { room_id, code });
-// }
-// function codeEmitjs(code) {
-//     socket.emit("code_change_js", { room_id, code });
-// }
+function codeEmithtml(code) {
+    socket.emit("code_change_html", { room_id, code });
+}
+function codeEmitcss(code) {
+    socket.emit("code_change_css", { room_id, code });
+}
+function codeEmitjs(code) {
+    socket.emit("code_change_js", { room_id, code });
+}
 
-// socket.on("code_change_html", ({ code }) => {
-//     console.log("html" + code);
-//     editorHTML.getDoc().setValue(code);
-//     htmlEditor = code;
-//     update();
-// });
-// socket.on("code_change_css", ({ code }) => {
-//     console.log("css" + code);
-//     editorCSS.getDoc().setValue(code);
-//     cssEditor = code;
-//     update();
-// });
-// socket.on("code_change_js", ({ code }) => {
-//     console.log("js" + code);
-//     editorJS.getDoc().setValue(code);
-//     jsEditor = code;
-//     update();
-// });
+socket.on("code_change_html", ({ code }) => {
+    console.log("html" + code);
+    editorHTML.getDoc().setValue(code);
+    htmlEditor = code;
+    update();
+});
+socket.on("code_change_css", ({ code }) => {
+    console.log("css" + code);
+    editorCSS.getDoc().setValue(code);
+    cssEditor = code;
+    update();
+});
+socket.on("code_change_js", ({ code }) => {
+    console.log("js" + code);
+    editorJS.getDoc().setValue(code);
+    jsEditor = code;
+    update();
+});
 
-// socket.on("join", ({ username, clients }) => {
-//     console.log(username);
-//     console.log(clients)
-//     let doc = document.getElementById("appendItems");
-//     clients.forEach((el) => {
-//         const newClient = document.createElement("li");
-//         newClient.innerHTML = `<a href="#">
-//                     <i class='bx bx-user'></i>
-//                     <span class="links_name">${el.username}</span>
-//                 </a>`;
-//         doc.append(newClient)
-//     })
-//     Swal.fire({
-//         position: "top-end",
-//         title: `${username} has joined`,
-//         showConfirmButton: false,
-//         timer: 3000,
-//     });
-// });
+socket.on("join", ({ username, clients }) => {
+    console.log(username);
+    // console.log(users)
+    let doc = document.getElementById("appendItems");
+    clients.forEach((el) => {
+        const newClient = document.createElement("li");
+        newClient.innerHTML = `<a href="#">
+                    <i class='bx bx-user'></i>
+                    <span class="links_name">${el.username}</span>
+                </a>`;
+        doc.append(newClient)
+    })
+    Swal.fire({
+        position: "top-end",
+        title: `${username} has joined`,
+        showConfirmButton: false,
+        timer: 3000,
+    });
+});
 
 export { codeMirror_config, setLocalValue }

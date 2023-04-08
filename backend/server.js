@@ -11,7 +11,7 @@ const app = express();
 app.use(cors());
 const server = http.createServer(app);
 const io = socketIo(server);
-
+let users = [];
 app.get("/", (req, res)=>{
     res.send("Home");
 })
@@ -36,25 +36,26 @@ function getAllConnectedClients(room_id) {
 
 // Connection made
 io.on('connection', (socket) => {
-    console.log('socket connected', socket.id);
+    // console.log('socket connected', socket.id);
 
 
     socket.on("join", ({room_id, username}) => {
-        console.log(room_id, username);
+        // console.log(room_id, username);
         // storing users with unique socket id
         user_socket_map[socket.id] = username;
         // joining room 
+        console.log(users)
         socket.join(room_id);
         // getting all the clients for the room
         const clients = getAllConnectedClients(room_id);
-        // clients.forEach(({ socketId }) => {
-        //     io.to(socketId).emit("join", {
-        //         clients,
-        //         username,
-        //         socketId: socket.id,
-        //     });
-        // });
-        socket.broadcast.to(room_id).emit("join",{username,clients});
+        clients.forEach(({ socketId }) => {
+            io.to(socketId).emit("join", {
+                clients,
+                username,
+                socketId: socket.id,
+            });
+        });
+        // io.to(room_id).emit("join",{username,clients});
     });
 
      // event for emitting the code_change 

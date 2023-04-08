@@ -21,7 +21,6 @@
     <link rel="icon" type="image/png" sizes="32x32" href="./resources/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="./resources/favicons/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="./resources/favicons/favicon-16x16.png">
-    <link rel="manifest" href="/manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
@@ -63,9 +62,9 @@
 
 
     <!-- ----------Socket cdn------------ -->
-    <!-- <script src="https://cdn.socket.io/3.1.3/socket.io.min.js"
+    <script src="https://cdn.socket.io/3.1.3/socket.io.min.js"
         integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"
-        crossorigin="anonymous"></script> -->
+        crossorigin="anonymous"></script>
     <!-- ========alert======== -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -115,18 +114,7 @@
     <div class="sidebar">
         <div class="logo-details">
             <ul style="margin-top: 100px;width: 100%;">
-                <li>
-                    <a href="#">
-                        <i class='bx bx-home'></i>
-                        <span class="links_name" id="currentRoom">Room ID</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class='bx bx-user'></i>
-                        <span class="links_name" id="currentUser">User</span>
-                    </a>
-                </li>
+               <!-- items here  -->
             </ul>
         </div>
         <ul class="nav-list" id="appendItems">
@@ -135,32 +123,31 @@
     </div>
 
     <section class="main_section layout_1" id="main_section">
-        <div class="resizable-x" style="flex-direction: row-reverse;">
-            <div class="output_iframe_section" style="flex: 50%;">
-                <iframe id="viewer"></iframe>
-            </div>
-            <div class="resizer-x"></div>
-            <div class="resizable-y" style="flex: 50%;">
+        <div class="resizable-x">
+            <div class="resizable-y" style="width: 50%;">
+                <div class="resizer-y html">HTML</div>
                 <div class="html_editor" style="height: 33.33%;min-height: 50px;">
-                    <div class="resizer-y html">HTML</div>
                     <textarea id="htmlCode" placeholder="Type HTML code here"></textarea>
                 </div>
+                <div class="resizer-y resizer-y-1 css">CSS</div>
                 <div class="css_editor" style="height: 33.33%;min-height: 50px;">
-                    <div class="resizer-y resizer-y-1 css">CSS</div>
                     <textarea id="cssCode" placeholder="Type CSS code here"></textarea>
                 </div>
+                <div class="resizer-y js">JS</div>
                 <div class="js_editor" style="height: 33.33%;min-height: 50px;">
-                    <div class="resizer-y resizer-y-2 js">JS</div>
                     <textarea id="javascriptCode" placeholder="Type JavaScript code here"></textarea>
                 </div>
             </div>
+            <div class="resizer-x resizer-x-1"></div>
+            <div class="output_iframe_section" style="width: 50%;">
+                <iframe id="viewer"></iframe>
+            </div>
         </div>
     </section>
-
 </body>
 
 </html>
 
 <script src="./scripts/editor.js" type="module"></script>
 <script src="./scripts/main_section_layout.js" type="module"></script>
-<script src="./scripts/main_section.js"></script>
+<script src="./scripts/resizer.js" type="module"></script>
