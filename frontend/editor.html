@@ -40,8 +40,6 @@
     <script src="./codemirror/mode/css/css.js"></script>
     <script src="./codemirror/mode/javascript/javascript.js"></script>
 
-    <!-- codemirror theme -->
-    <link rel="stylesheet" href="./codemirror/theme/ayu-dark.css">
 
 
     <!-- some addons -->
@@ -73,7 +71,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-
+    <!-- CODEMIRROR THEMES  -->
+    <link rel="stylesheet" href="./codemirror/theme/ayu-dark.css">
+    <!-- <link rel="stylesheet" href="./codemirror/theme/abcdef.css"> -->
 
 
 </head>
@@ -87,13 +87,20 @@
         <div class="nav_container">
             <button class="btn btn-light btn-sm" id="saveOnClick">
                 <i class="fa-solid fa-shield"></i>
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
-                SAVE
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                    style="display: none;"></span>
+                Save
+            </button>
+            <button class="btn btn-light btn-sm" id="autoSaveOnClick">
+                <i class="fa-solid fa-circle-dot"></i>
+                <span class="spinner-grow spinner-grow-sm bg-success" role="status" aria-hidden="true"
+                    style="display: none;"></span>
+                Auto Save
             </button>
 
             <button class="btn btn-light btn-sm" id="runOnClick">
                 <i class="fa-solid fa-rotate-right"></i>
-                RUN
+                Run
             </button>
             <button type="button" class="btn btn-danger btn-sm" id="runLive">
                 <i class="fa-solid fa-arrows-rotate"></i>
@@ -104,10 +111,8 @@
                     aria-expanded="false">
                     Theme
                 </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" id="theme-1">Theme 1</a></li>
-                    <li><a class="dropdown-item" id="theme-2">Theme 2</a></li>
-                    <li><a class="dropdown-item" id="theme-3">Theme 3</a></li>
+                <ul class="dropdown-menu" id="themeDropDownMenu">
+
                 </ul>
             </div>
             <div class="btn-group">
@@ -164,16 +169,17 @@
             </div>
         </div>
     </section>
-    
+
     <!-- ========================== Alert Toast ========================== -->
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
         <div id="liveToast" class="toast bg-dark text-light" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body danger" id="toast-msg">
-                Hello, world! This is a toast message.
-               </div>
-                <button type="button" class="btn-close me-2 m-auto " data-bs-dismiss="toast" aria-label="Close"></button>
-              </div>
+                    Hello, world! This is a toast message.
+                </div>
+                <button type="button" class="btn-close me-2 m-auto " data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
         </div>
     </div>
     <!-- ========================== BOOTSTRAP JS ========================== -->
@@ -185,6 +191,7 @@
 
 </html>
 
-<script src="./scripts/editor.js" type="module"></script>
+<script src="./scripts/theme.js" type="module" defer></script>
+<script src="./scripts/editor.js" type="module" defer></script>
 <script src="./scripts/main_section_layout.js" type="module"></script>
 <script src="./scripts/resizer.js" type="module"></script>

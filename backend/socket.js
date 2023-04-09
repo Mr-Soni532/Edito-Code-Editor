@@ -42,13 +42,13 @@ module.exports = (server) => {
         socket.on("code_change_js", ({ roomId, code }) => {
             socket.broadcast.to(roomId).emit("code_change_js", { code })
         });
-    
-        // event for code sync
-        socket.on("sync_code", (socketId, code) => {
-            socket.broadcast.to(socketId).emit("code_change", { code });
+
+        //! Auto Save
+        socket.on("autoSave", ({roomId,autoSaveFlag}) => {
+            socket.broadcast.to(roomId).emit("autoSave",{autoSaveFlag})
         });
     
-        // disconnect event
+        //! disconnect event
         socket.on('disconnect', () => {
             // Alert to all clients
             const user = userLeave(socket.id)
