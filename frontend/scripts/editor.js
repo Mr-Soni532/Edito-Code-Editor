@@ -3,10 +3,12 @@ import { resizerFunction } from "./resizer.js";
 const urlParams = new URLSearchParams(window.location.search);
 const username = urlParams.get("username");
 const roomId = urlParams.get("editoID");
-const HOST = 'http://localhost:3000'
-let THEME_STYLE = localStorage.getItem('theme')||'ayu-dark'
+
+const HOST = 'https://edito-backend.onrender.com';
+let THEME_STYLE = localStorage.getItem('theme')||'ayu-dark';
+
 //===> Socket setup
-const socket = io("http://localhost:3000/", { transports: ["websocket"] });
+const socket = io(`${HOST}/`, { transports: ["websocket"] });
 
 // =========== Variable Declaration ========
 const roomId_btn = document.querySelector('#roomid_section')
@@ -27,8 +29,6 @@ let jsCode = "";
 let editorHTML;
 let editorCSS;
 let editorJS;
-
-
 
 // =========>>>>>>>>>> Inital Calls
 codeMirror_config();
@@ -323,14 +323,6 @@ socket.on('autoSave', (val) => {
     localStorage.setItem('autoSaveFlag', autoSaveFlag)
     autoSaveBtnStatus()
 })
-
-
-
-
-
-
-
-
 
 
 export { codeMirror_config, setLocalValue, update }
