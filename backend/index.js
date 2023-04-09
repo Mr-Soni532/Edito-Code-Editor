@@ -11,7 +11,7 @@ app.use(express.json())
 
 //=====> env variables
 require("dotenv").config();
-const PORT = process.env.port;
+const PORT = process.env.PORT;
 
 //=====> Created Server
 const server = http.createServer(app);
