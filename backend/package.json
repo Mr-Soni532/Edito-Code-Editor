@@ -6,7 +6,7 @@
   "scripts": {
     "server": "nodemon index.js"
   },
-  "author": "",
+  "author": "Bhupender Soni",
   "license": "ISC",
   "dependencies": {
     "cookie-parser": "^1.4.6",
