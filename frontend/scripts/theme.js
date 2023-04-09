@@ -1,7 +1,7 @@
 const themeDropDown = document.querySelector('#themeDropDownMenu')
 
 function fetchAllTheme() {
-    fetch('/frontend/codemirror/theme')
+    fetch('../codemirror/theme')
         .then(response => response.text())
         .then(text => {
             //  regular expressions to extract the path of the CSS files
