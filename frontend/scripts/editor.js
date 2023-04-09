@@ -4,7 +4,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const username = urlParams.get("username");
 const roomId = urlParams.get("editoID");
 const HOST = 'http://localhost:3000'
-
+let THEME_STYLE = localStorage.getItem('theme')||'ayu-dark'
 //===> Socket setup
 const socket = io("http://localhost:3000/", { transports: ["websocket"] });
 
@@ -32,10 +32,29 @@ let editorJS;
 
 // =========>>>>>>>>>> Inital Calls
 codeMirror_config();
-// autoSaveBtnStatus()
+addThemeLinkToHead(THEME_STYLE)
 resizerFunction()
 
 //!=====================> Event Listeners
+
+// ====================>  Theme handler
+setTimeout(() => {
+    let allThemes = document.querySelectorAll('.themeDropDownItem');
+    allThemes.forEach(item => {
+        item.addEventListener('click', () => {
+            //Adding theme link in head
+            addThemeLinkToHead(item.innerText)
+
+            // Change theme 
+            THEME_STYLE = item.innerText;
+            localStorage.setItem('theme', THEME_STYLE)
+            codeMirror_config();
+            setLocalValue()
+        })
+    })
+}, 500);
+
+
 
 //===> Side menu toggler
 closeBtn.addEventListener("click", () => {
@@ -71,7 +90,7 @@ autoSaveOnClick.addEventListener('click', () => {
     autoSaveBtnStatus()
 
     //=> Emit autoSave Event
-    socket.emit('autoSave', {roomId,autoSaveFlag})
+    socket.emit('autoSave', { roomId, autoSaveFlag })
 })
 
 //============> Toast activity
@@ -88,7 +107,7 @@ roomId_btn.addEventListener('click', () => {
 function codeMirror_config() {
     editorHTML = CodeMirror.fromTextArea(document.getElementById('htmlCode'), {
         mode: 'xml',
-        theme: "ayu-dark",
+        theme: THEME_STYLE,
         lineNumbers: true,
         autoCloseTags: true,
         autoCloseBrackets: true,
@@ -101,7 +120,7 @@ function codeMirror_config() {
 
     editorCSS = CodeMirror.fromTextArea(document.getElementById('cssCode'), {
         mode: 'css',
-        theme: "ayu-dark",
+        theme: THEME_STYLE,
         lineNumbers: true,
         autoCloseTags: true,
         autoCloseBrackets: true,
@@ -113,7 +132,7 @@ function codeMirror_config() {
 
     editorJS = CodeMirror.fromTextArea(document.getElementById('javascriptCode'), {
         mode: 'javascript',
-        theme: "ayu-dark",
+        theme: THEME_STYLE,
         lineNumbers: true,
         autoCloseTags: true,
         autoCloseBrackets: true,
@@ -132,19 +151,19 @@ function codeMirror_config() {
         htmlCode = editor.doc.getValue();
         emitHtmlCode(htmlCode);
         if (liveFlag) update();
-        if(autoSaveFlag) codeChange()
+        if (autoSaveFlag) codeChange()
     });
     editorCSS.on("keyup", (editor) => {
         cssCode = editor.doc.getValue();
         emitCssCode(cssCode);
         if (liveFlag) update();
-        if(autoSaveFlag) codeChange()
+        if (autoSaveFlag) codeChange()
     });
     editorJS.on("keyup", (editor) => {
         jsCode = editor.doc.getValue();
         emitJsCode(jsCode);
         if (liveFlag) update();
-        if(autoSaveFlag) codeChange()
+        if (autoSaveFlag) codeChange()
     });
 }
 
@@ -167,7 +186,7 @@ function setLocalValue() {
     editorJS.getDoc().setValue(jsCode);
 }
 
-function autoSaveBtnStatus(){
+function autoSaveBtnStatus() {
     if (autoSaveFlag) {
         document.querySelector(`#autoSaveOnClick>i`).style.display = 'none';
         document.querySelector(`#autoSaveOnClick>span`).style.display = 'inline-block';
@@ -187,6 +206,14 @@ function emitCssCode(code) {
 
 function emitJsCode(code) {
     socket.emit("code_change_js", { roomId, code });
+}
+
+//==> Add Theme link to head
+function addThemeLinkToHead(theme){
+    let link = document.createElement('link');
+    link.rel = "stylesheet";
+    link.href = `./codemirror/theme/${theme}.css`;
+    document.head.appendChild(link)
 }
 
 //============> Save Code Handler
@@ -255,7 +282,7 @@ socket.on('newUserAlert', (username) => {
 })
 
 //===> Code Change Listner for HTML
-socket.on("code_change_html", ({ code }) => {  
+socket.on("code_change_html", ({ code }) => {
     editorHTML.getDoc().setValue(code);
     htmlCode = code;
     update();
@@ -291,7 +318,7 @@ socket.on("roomUsers", ({ users }) => {
 });
 
 //==============> Auto Save 
-socket.on('autoSave', (val)=>{
+socket.on('autoSave', (val) => {
     autoSaveFlag = val.autoSaveFlag;
     localStorage.setItem('autoSaveFlag', autoSaveFlag)
     autoSaveBtnStatus()
