@@ -3,11 +3,24 @@ import { resizerFunction } from "./resizer.js";
 const urlParams = new URLSearchParams(window.location.search);
 const username = urlParams.get("username");
 const roomId = urlParams.get("editoID");
+const HOST = 'http://localhost:3000'
+
+//===> Socket setup
+const socket = io("http://localhost:3000/", { transports: ["websocket"] });
+
+// =========== Variable Declaration ========
 const roomId_btn = document.querySelector('#roomid_section')
 const saveOnClick = document.querySelector('#saveOnClick')
-const HOST = 'http://localhost:3000'
+let sidebar = document.querySelector(".sidebar");
+let closeBtn = document.querySelector("#sidebar-controller");
+let runOnClick = document.getElementById('runOnClick')
+let runLive = document.getElementById('runLive')
+let autoSaveOnClick = document.getElementById('autoSaveOnClick')
+
+// =========== Active Flags ========
+let liveFlag = JSON.parse(localStorage.getItem('live_Flag') || true);
+let autoSaveFlag = JSON.parse(localStorage.getItem('autoSaveFlag')) || false;
 // =========== Storage Variable ========
-let liveFlag = localStorage.getItem('live_Flag') || true;
 let htmlCode = "";
 let cssCode = "";
 let jsCode = "";
@@ -15,29 +28,27 @@ let editorHTML;
 let editorCSS;
 let editorJS;
 
-// ===============================
+
+
+// =========>>>>>>>>>> Inital Calls
+codeMirror_config();
+// autoSaveBtnStatus()
 resizerFunction()
-// ===============================
 
+//!=====================> Event Listeners
 
-// Side menu toggler
-let sidebar = document.querySelector(".sidebar");
-let closeBtn = document.querySelector("#sidebar-controller");
-
+//===> Side menu toggler
 closeBtn.addEventListener("click", () => {
     sidebar.classList.toggle("open");
-    menuBtnChange();//calling the function(optional)
 });
 
+//===> Code execute on click run
+runOnClick.addEventListener('click', update())
 
-// Code Execution funcitonality
-let runOnClick = document.getElementById('runOnClick')
-let runLive = document.getElementById('runLive')
+//===> Save On Click
+saveOnClick.addEventListener('click', saveCode)
 
-runOnClick.addEventListener('click', () => {
-    update();
-    // style
-})
+//===> Live code execution with live active
 runLive.addEventListener('click', () => {
     liveFlag = liveFlag ? false : true;
     localStorage.setItem('liveFlag', liveFlag)
@@ -48,24 +59,32 @@ runLive.addEventListener('click', () => {
     } else {
         runLive.classList.remove('btn-danger')
         runLive.classList.add('btn-light')
-
     }
 })
 
-// following are the code to change sidebar button(optional)
-function menuBtnChange() {
-    if (sidebar.classList.contains("open")) {
-        closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");//replacing the iocns class
-    } else {
-        closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");//replacing the iocns class
-    }
-}
+//===> Auto Save flag toggler
+autoSaveOnClick.addEventListener('click', () => {
+    autoSaveFlag = autoSaveFlag ? false : true;
 
+    localStorage.setItem('autoSaveFlag', autoSaveFlag)
+    //=> style
+    autoSaveBtnStatus()
 
-// CodeMirror Code ==========>>>>>>>>>>>>>>>>
+    //=> Emit autoSave Event
+    socket.emit('autoSave', {roomId,autoSaveFlag})
+})
 
-codeMirror_config();
+//============> Toast activity
+roomId_btn.addEventListener('click', () => {
+    navigator.clipboard.writeText(roomId)
+    document.querySelector('#liveToast').classList.add('show')
+    document.querySelector('#toast-msg').innerText = 'Room Id copied in clipboard!'
+    setTimeout(() => {
+        document.querySelector('#liveToast').classList.remove('show')
+    }, 2000);
+})
 
+//!=========>>>>>>>> CodeMirror Configuration
 function codeMirror_config() {
     editorHTML = CodeMirror.fromTextArea(document.getElementById('htmlCode'), {
         mode: 'xml',
@@ -79,7 +98,6 @@ function codeMirror_config() {
         extraKeys: { "Ctrl-Space": "autocomplete" },
         autoRefresh: true
     })
-    // editorHTML.refresh()
 
     editorCSS = CodeMirror.fromTextArea(document.getElementById('cssCode'), {
         mode: 'css',
@@ -114,21 +132,24 @@ function codeMirror_config() {
         htmlCode = editor.doc.getValue();
         emitHtmlCode(htmlCode);
         if (liveFlag) update();
+        if(autoSaveFlag) codeChange()
     });
     editorCSS.on("keyup", (editor) => {
         cssCode = editor.doc.getValue();
         emitCssCode(cssCode);
         if (liveFlag) update();
+        if(autoSaveFlag) codeChange()
     });
     editorJS.on("keyup", (editor) => {
         jsCode = editor.doc.getValue();
         emitJsCode(jsCode);
         if (liveFlag) update();
+        if(autoSaveFlag) codeChange()
     });
 }
 
 
-
+//! =============>>>>>>>> Utility Functions
 function update() {
     let text = htmlCode + "<style>" + cssCode + "</style>" + "<script>" + jsCode + "<\/script>";
     // console.log(htmlCode, cssCode, jsCode)
@@ -139,27 +160,79 @@ function update() {
     let srcDoc;
     iframe.srcdoc = srcDoc;
 }
+
 function setLocalValue() {
     editorHTML.getDoc().setValue(htmlCode);
     editorCSS.getDoc().setValue(cssCode);
     editorJS.getDoc().setValue(jsCode);
 }
 
-//------------ Socket.io --------------
+function autoSaveBtnStatus(){
+    if (autoSaveFlag) {
+        document.querySelector(`#autoSaveOnClick>i`).style.display = 'none';
+        document.querySelector(`#autoSaveOnClick>span`).style.display = 'inline-block';
+    } else {
+        document.querySelector(`#autoSaveOnClick>i`).style.display = 'inline-block';
+        document.querySelector(`#autoSaveOnClick>span`).style.display = 'none';
+    }
+}
 
-const socket = io("http://localhost:3000/", { transports: ["websocket"] });
+function emitHtmlCode(code) {
+    socket.emit("code_change_html", { roomId, code });
+}
 
-// document.getElementById("currentRoom").innerText = roomId;
-// document.getElementById("currentUser").innerText = username;
+function emitCssCode(code) {
+    socket.emit("code_change_css", { roomId, code });
+}
+
+function emitJsCode(code) {
+    socket.emit("code_change_js", { roomId, code });
+}
+
+//============> Save Code Handler
+async function saveCode() {
+    document.querySelector(`#saveOnClick>i`).style.display = 'none';
+    document.querySelector(`#saveOnClick>span`).style.display = 'inline-block';
+    let res = await fetch(`${HOST}/saveCode`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            roomId, htmlCode, cssCode, jsCode
+        })
+    }).finally(() => {
+        document.querySelector(`#saveOnClick>i`).style.display = 'inline-block';
+        document.querySelector(`#saveOnClick>span`).style.display = 'none';
+    })
+}
+
+// ===============>>>>> Debounce Auto Saving
+function debounce(func, timeout = 1000) {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => { func.apply(this, args); }, timeout);
+    };
+}
+function saveInput() {
+    saveCode()
+}
+const codeChange = debounce((e) => saveInput(e));
+// ===========================<<<<<
 
 
-// console.log(username, roomId);
+//!================>>>>>>>>> Socket Emiters
 
 socket.emit("joinRoom", { username, roomId });
 
+
+//!================>>>>>>>>> Socket Listeners
+
+//===> Welcome Listner
 socket.on('wlcm-message', (val) => console.log(val))
 
-// run on every new connection
+//===> Execute on new Connection or Reconnection
 socket.on('renderCurrentCode', async () => {
     let res = await fetch(`${HOST}/fetchCode/${roomId}`)
     let { roomCode } = await res.json();
@@ -172,6 +245,7 @@ socket.on('renderCurrentCode', async () => {
     update()
 })
 
+//===> New Connection BroadCast Alert
 socket.on('newUserAlert', (username) => {
     document.querySelector('#liveToast').classList.add('show')
     document.querySelector('#toast-msg').innerText = `${username} has joined this workspace.`
@@ -180,38 +254,29 @@ socket.on('newUserAlert', (username) => {
     }, 2000);
 })
 
-
-function emitHtmlCode(code) {
-    socket.emit("code_change_html", { roomId, code });
-}
-function emitCssCode(code) {
-    socket.emit("code_change_css", { roomId, code });
-}
-function emitJsCode(code) {
-    socket.emit("code_change_js", { roomId, code });
-}
-
-socket.on("code_change_html", ({ code }) => {
-
+//===> Code Change Listner for HTML
+socket.on("code_change_html", ({ code }) => {  
     editorHTML.getDoc().setValue(code);
     htmlCode = code;
     update();
 });
+
+//===> Code Change Listner for CSS
 socket.on("code_change_css", ({ code }) => {
-    console.log("css" + code);
     editorCSS.getDoc().setValue(code);
     cssCode = code;
     update();
 });
+
+//===> Code Change Listner for JavaScript
 socket.on("code_change_js", ({ code }) => {
-    console.log("js" + code);
     editorJS.getDoc().setValue(code);
     jsCode = code;
     update();
 });
 
+//==============> Update Current Room Users
 socket.on("roomUsers", ({ users }) => {
-
     let doc = document.getElementById("appendItems");
     document.getElementById("userCount").innerText = users.length
     doc.innerHTML = "";
@@ -223,39 +288,22 @@ socket.on("roomUsers", ({ users }) => {
                 </a>`;
         doc.append(newClient)
     })
-
 });
 
-
-//============> Toast activity
-roomId_btn.addEventListener('click', () => {
-    navigator.clipboard.writeText(roomId)
-    document.querySelector('#liveToast').classList.add('show')
-    document.querySelector('#toast-msg').innerText = 'Room Id copied in clipboard!'
-    setTimeout(() => {
-        document.querySelector('#liveToast').classList.remove('show')
-    }, 2000);
-})
-
-//============> Save Code Handler
-saveOnClick.addEventListener('click', async () => {
-    document.querySelector(`#saveOnClick>i`).style.display = 'none';
-    document.querySelector(`#saveOnClick>span`).style.display = 'inline-block';
-    let res = await fetch(`${HOST}/saveCode`,{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            roomId, htmlCode, cssCode, jsCode
-        })
-    }).finally(()=>{
-        document.querySelector(`#saveOnClick>i`).style.display = 'inline-block';
-        document.querySelector(`#saveOnClick>span`).style.display = 'none';
-    })
+//==============> Auto Save 
+socket.on('autoSave', (val)=>{
+    autoSaveFlag = val.autoSaveFlag;
+    localStorage.setItem('autoSaveFlag', autoSaveFlag)
+    autoSaveBtnStatus()
 })
 
 
 
 
-export { codeMirror_config, setLocalValue }
+
+
+
+
+
+
+export { codeMirror_config, setLocalValue, update }
