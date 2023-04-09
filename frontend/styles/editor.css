@@ -418,11 +418,14 @@
   overflow-y: scroll;
 }
 
-/*! ==================| Main Section |=================== */
-.layout_2 {
-  /* display: none; */
+#themeDropDownMenu{
+  max-height: 500px;
+  overflow-y: scroll;
 }
 
+
+
+/*! ==================| Main Section |=================== */
 
 
 @media (max-width: 420px) {
