@@ -4,6 +4,8 @@
   "description": "Real time text editor",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "build": "echo sucess",
     "server": "nodemon index.js"
   },
   "author": "Bhupender Soni",
