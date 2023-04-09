@@ -14,7 +14,6 @@ function fetchAllTheme() {
                 let res = path.match(regex)
                 return res[0]
             })
-            console.log()
             injectThemeInDropDown(cssFiles); // Array of CSS file names
         })
 }
