@@ -16,7 +16,7 @@ exports.fetchCodeByRoomId = async (req, res) => {
             res.send({roomCode: {
                 htmlCode: sampleTemplate.html(),
                 cssCode: sampleTemplate.css(),
-                jsCode: ''
+                jsCode: '// Ctrl+space for suggestion.'
             }})
         }
     } catch (error) {
