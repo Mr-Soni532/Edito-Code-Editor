@@ -1,22 +1,11 @@
 const themeDropDown = document.querySelector('#themeDropDownMenu')
+import data from '../util/themeData.js'
 
 function fetchAllTheme() {
-    fetch('codemirror/theme')
-        .then(response => response.text())
-        .then(text => {
-            //  regular expressions to extract the path of the CSS files
-            const cssFilesPaths = text.match(/href="([^"]+\.css)"/g)
-                .map(match => match.slice(6, -1));
-
-            //  regular expressions to extract the name of the CSS files
-            let regex = '(?<=theme\/)[^\/]+(?=\.css)'
-            const cssFiles = cssFilesPaths.map(path => {
-                let res = path.match(regex)
-                return res[0]
+            const cssFiles = data.map(fileName => {
+              return  fileName.replace('.css',"")   
             })
-            console.log()
-            injectThemeInDropDown(cssFiles); // Array of CSS file names
-        })
+            injectThemeInDropDown(cssFiles)
 }
 fetchAllTheme()
 

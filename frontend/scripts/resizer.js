@@ -13,14 +13,14 @@ export function resizerFunction() {
           function onmousemove(e) {
             e.preventDefault();
             let mainWidth = document.getElementById('main_section').clientWidth;
-            console.log(mainWidth)
+            // console.log(mainWidth)
             let movewidth = ((resizer._clientX) / (mainWidth)) * 100
             const clientX = e.clientX;
             const deltaX = clientX - (resizer._clientX || clientX);
             resizer._clientX = clientX;
             const l = resizer.previousElementSibling;
             const r = resizer.nextElementSibling;
-            console.log(clientX)
+            // console.log(clientX)
             // LEFT
             if (deltaX < 0) {
                 
@@ -70,7 +70,7 @@ export function resizerFunction() {
             // let prevHeight = (prevElement_1.clientHeight/(mainHeight))*100
             // let nextHeight = (nextElement_1.clientHeight/(mainHeight))*100
             // UP
-            console.log(moveheight)
+            // console.log(moveheight)
             if (deltaY_1 < 0) {
                 let diffHeight = (33.33 - moveheight)
                 prevElement_1.style.height = moveheight + '%';
@@ -115,7 +115,7 @@ export function resizerFunction_layout_3() {
             resizer._clientY = clientY;
             const l = resizer.previousElementSibling;
             const r = resizer.nextElementSibling;
-            console.log(clientY)
+            // console.log(clientY)
             if (deltaX < 0) {
                 let diffHeight = (50 - moveheight)
                 // l.style.height = moveheight + '%';
