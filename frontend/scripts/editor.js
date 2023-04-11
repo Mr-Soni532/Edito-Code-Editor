@@ -3,8 +3,8 @@ import { resizerFunction } from "./resizer.js";
 const urlParams = new URLSearchParams(window.location.search);
 const username = urlParams.get("username");
 const roomId = urlParams.get("editoID");
-const HOST = 'http://localhost:3000'
-// const HOST = 'https://edito-backend.onrender.com'
+// const HOST = 'http://localhost:3000'
+const HOST = 'https://edito-backend.onrender.com'
 let THEME_STYLE = localStorage.getItem('theme')||'ayu-dark'
 //===> Socket setup
 const socket = io(`${HOST}/`, { transports: ["websocket"] });
