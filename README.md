@@ -16,7 +16,7 @@
 
 <br/>
 
-## 🏷️ Special Features of ALS :-
+## 🏷️ Special Features :-
 
  - __Code Execution__ - Manual | Automatic
  - __Save Code__ - Manual | Automatic
