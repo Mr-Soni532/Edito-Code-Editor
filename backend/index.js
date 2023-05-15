@@ -6,7 +6,12 @@ const controller = require('./controllers/code.controller')
 let cors = require('cors');
 const connectToMongo = require("./config/db");
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "https://edito-code-editor.vercel.app",
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', "Authorization", "Access-Control-Allow-Credentials", "Access-Control-Allow-Origin"],
+  credentials: true
+}));
 app.use(express.json())
 
 //=====> env variables
